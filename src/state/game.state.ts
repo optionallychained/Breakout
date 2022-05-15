@@ -8,7 +8,7 @@ export const GAME_STATE = new State({
     init: (game) => {
         game.addSystems(new Physics(), new Collision());
 
-        const wallSize = game.getData<number>('wallSize');
+        const wallSize = 20;
         const [worldX, worldY] = [game.world.dimensions.x / 2, game.world.dimensions.y / 2];
 
         game.world.addEntities(
@@ -19,12 +19,36 @@ export const GAME_STATE = new State({
             new Paddle(new Vec2(0, -worldY + wallSize * 2)),
             new Ball()
         );
+
+        // set some global game data
+        game.setData('lives', 3);
+        game.setData('points', 0);
+        game.setData('wallSize', wallSize);
     },
-    end: (game) => { },
+    end: (game) => {
+        game.text.clearEntities();
+
+        const paddle = game.world.filterEntitiesByTag('paddle');
+        const ball = game.world.filterEntitiesByTag('ball');
+
+        // remove just the paddle and ball(s) to keep the death screen looking nice
+        for (const e of [...paddle, ...ball]) {
+            game.world.removeEntity(e);
+        }
+    },
     tick: (game) => {
         game.text.clearEntities();
+
+        const lives = game.getData<number>('lives');
+
+        if (lives <= 0) {
+            // game over
+            game.switchToState('gameOver');
+            return;
+        }
+
         game.text.addString(
-            `lives: ${game.getData<number>('lives')}`,
+            `lives: ${lives}`,
             new Vec2(-game.world.dimensions.x / 2 + 50, game.world.dimensions.y / 2 - 50),
             new Vec2(20, 20),
             Color.white()
