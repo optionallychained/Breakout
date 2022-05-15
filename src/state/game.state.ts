@@ -1,5 +1,6 @@
 import { Collision, Color, Physics, State, Transform, Vec2 } from 'aura-2d';
 import { Ball } from '../entity/ball.entity';
+import { Brick } from '../entity/brick.entity';
 import { Paddle } from '../entity/paddle.entity';
 import { Wall } from '../entity/wall.entity';
 
@@ -19,6 +20,27 @@ export const GAME_STATE = new State({
             new Paddle(new Vec2(0, -worldY + wallSize * 2)),
             new Ball()
         );
+
+        const brickRows = 5;
+        const brickColumns = 10;
+        const brickPadding = 10;
+        const brickMargin = 75;
+        const brickY = 0;
+
+        const brickWidth = (worldX * 2 - wallSize * 2 - brickMargin * 2 - brickPadding * (brickColumns - 1)) / brickColumns;
+        const brickHeight = (worldY - wallSize - brickMargin - brickPadding * (brickRows - 1)) / brickRows;
+        const brickScale = new Vec2(brickWidth, brickHeight);
+
+        const limitLeft = -worldX + wallSize + brickMargin + brickWidth / 2;
+        const limitRight = worldX - wallSize - brickMargin;
+        const limitBottom = brickY + brickHeight / 2;
+        const limitTop = worldY - wallSize - brickMargin;
+
+        for (let x = limitLeft; x <= limitRight; x += brickWidth + brickPadding) {
+            for (let y = limitBottom; y <= limitTop; y += brickHeight + brickPadding) {
+                game.world.addEntity(new Brick(new Vec2(x, y), brickScale));
+            }
+        }
 
         // set some global game data
         game.setData('lives', 3);

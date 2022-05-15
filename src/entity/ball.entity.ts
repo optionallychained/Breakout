@@ -8,7 +8,7 @@ export class Ball extends Entity {
         super({
             tag: 'ball',
             components: [
-                new Transform(new Vec2(), new Vec2(30, 30), 0, new Vec2()),
+                new Transform(new Vec2(), new Vec2(25, 25)),
                 new Model(Geometries.CIRCLE),
                 new Shader(ShaderPrograms.BASIC),
                 new FlatColor(Color.white()),
@@ -47,15 +47,42 @@ export class Ball extends Entity {
         const transform = this.getComponent<Transform>('Transform');
 
         if (other.tag === 'paddle') {
-            // invert y velocity
+            // invert y velocity for paddle
             transform.velocity.setY(-transform.velocity.y);
         }
-        else if (other.tag.includes('wall')) {
-            // invert x for vertical wall, y for horizontal wall
-            if (other.tag === 'wall-vert') {
+        else if (other.tag === 'wall-vert') {
+            // invert x velocity for vertical wall
+            transform.velocity.setX(-transform.velocity.x);
+        }
+        else if (other.tag === 'wall-hor') {
+            // invert y velocity for horizontal wall
+            transform.velocity.setY(-transform.velocity.y);
+        }
+        else if (other.tag === 'brick') {
+            const ot = other.getComponent<Transform>('Transform');
+
+            const leftHit = (
+                (transform.position.x < ot.position.x)
+                &&
+                (transform.position.y < ot.position.y + ot.scale.y / 2)
+                &&
+                (transform.position.y > ot.position.y - ot.scale.y / 2)
+            );
+
+            const rightHit = (
+                (transform.position.x > ot.position.x)
+                &&
+                (transform.position.y < ot.position.y + ot.scale.y / 2)
+                &&
+                (transform.position.y > ot.position.y - ot.scale.y / 2)
+            );
+
+            // invert x only for left or right side hit, y only for top or bottom hit
+            if (leftHit || rightHit) {
                 transform.velocity.setX(-transform.velocity.x);
             }
             else {
+                // always invert y
                 transform.velocity.setY(-transform.velocity.y);
             }
         }

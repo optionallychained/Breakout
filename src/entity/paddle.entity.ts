@@ -6,7 +6,7 @@ export class Paddle extends Entity {
         super({
             tag: 'paddle',
             components: [
-                new Transform(position, new Vec2(150, 30), 0),
+                new Transform(position, new Vec2(150, 30)),
                 new Model(Geometries.SQUARE),
                 new Shader(ShaderPrograms.BASIC),
                 new FlatColor(Color.red()),
