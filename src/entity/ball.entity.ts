@@ -21,7 +21,6 @@ export class Ball extends Entity {
         const transform = this.getComponent<Transform>('Transform');
 
         if (this.attached) {
-            // ensure velocity 0
             transform.velocity.set();
 
             // position above paddle
@@ -38,7 +37,10 @@ export class Ball extends Entity {
             if (transform.position.y + transform.scale.y * 0.75 <= -game.world.dimensions.y / 2) {
                 // death
                 this.toggleAttached();
-                game.setData('lives', game.getData<number>('lives') - 1);
+                game.setData('balls', game.getData<number>('balls') - 1);
+
+                // reset points multiplier
+                game.setData('multiplier', 1);
             }
         }
     }
@@ -51,6 +53,9 @@ export class Ball extends Entity {
 
             // invert y velocity for paddle
             transform.velocity.setY(-transform.velocity.y);
+
+            // reset points multiplier
+            game.setData('multiplier', 1);
         }
         else if (other.tag === 'wall-vert') {
             // invert x velocity for vertical wall
@@ -62,9 +67,8 @@ export class Ball extends Entity {
         }
         else if (other.tag === 'brick') {
             // TODO there are some edge cases associated with this logic
-            //   ball vel +y, side hit => weirdness
+            //   eg: ball vel +y, side hit => weirdness
             // also issue with multiple near-simultaneous collisions
-            //   vel inverts twice = "moves through groups"
 
             const ot = other.getComponent<Transform>('Transform');
 
@@ -92,6 +96,12 @@ export class Ball extends Entity {
                 // always invert y
                 transform.velocity.setY(-transform.velocity.y);
             }
+
+            // add points
+            // every brick hit in sequence (between paddle hits) yields more points
+            const multiplier = game.getData<number>('multiplier');
+            game.setData('points', game.getData<number>('points') + multiplier);
+            game.setData('multiplier', multiplier + 1);
         }
     }
 

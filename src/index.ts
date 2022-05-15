@@ -12,9 +12,7 @@ const game = new Game({
 game.registerShader(ShaderPrograms.BASIC);
 game.registerShader(ShaderPrograms.TEXTURE_COLORED);
 
-game.setData('lives', 3);
-game.setData('points', 0);
-game.setData('multiplier', 1);
+// set-once data
 game.setData('wallSize', 20);
 game.setData('brickRows', 8);
 game.setData('brickColumns', 10);

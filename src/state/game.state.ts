@@ -9,6 +9,11 @@ export const GAME_STATE = new State({
     init: (game) => {
         game.world.clearEntities();
 
+        // per-game data
+        game.setData('balls', 3);
+        game.setData('points', 0);
+        game.setData('multiplier', 1);
+
         // unpack some data
         const worldX = game.world.dimensions.x / 2;
         const worldY = game.world.dimensions.y / 2;
@@ -62,20 +67,43 @@ export const GAME_STATE = new State({
     tick: (game) => {
         game.text.clearEntities();
 
-        const lives = game.getData<number>('lives');
-        if (lives <= 0) {
+        // death condition
+        const balls = game.getData<number>('balls');
+        if (balls <= 0) {
             // game over
             game.switchToState('gameOver');
             return;
         }
 
+        // win condition
         const brickCount = game.world.filterEntitiesByTag('brick').length;
         if (brickCount <= 0) {
             game.switchToState('win');
+            return;
         }
 
+        const ball = game.world.filterEntitiesByTag('ball')[0] as Ball;
+        const paddle = game.world.filterEntitiesByTag('paddle')[0];
+
+        if (ball && paddle) {
+            if (ball.isAttached()) {
+                game.text.addString(
+                    'click',
+                    new Vec2(-2.5 * 40, -game.world.dimensions.y / 4 + 30),
+                    new Vec2(40, 40),
+                    Color.white()
+                );
+
+                if (game.input.isMouseDown()) {
+                    ball.getComponent<Transform>('Transform').velocity.set(300, 300);
+                    ball.toggleAttached();
+                }
+            }
+        }
+
+        // info readouts
         game.text.addString(
-            `lives: ${lives}`,
+            `balls: ${balls}`,
             new Vec2(-game.world.dimensions.x / 2 + 50, game.world.dimensions.y / 2 - 50),
             new Vec2(20, 20),
             Color.white()
@@ -86,14 +114,5 @@ export const GAME_STATE = new State({
             new Vec2(20, 20),
             Color.white()
         );
-
-        const ball = game.world.filterEntitiesByTag('ball')[0] as Ball;
-        const paddle = game.world.filterEntitiesByTag('paddle')[0];
-
-        // ball attached => mouse click => release ball
-        if (ball && paddle && ball.isAttached() && game.input.isMouseDown()) {
-            ball.getComponent<Transform>('Transform').velocity.set(300, 300);
-            ball.toggleAttached();
-        }
     }
 });
