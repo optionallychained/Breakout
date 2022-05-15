@@ -2,11 +2,11 @@ import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader,
 
 export class Paddle extends Entity {
 
-    constructor(position: Vec2) {
+    constructor(worldY: number, wallSize: number) {
         super({
             tag: 'paddle',
             components: [
-                new Transform(position, new Vec2(150, 30)),
+                new Transform(new Vec2(0, wallSize * 2 - worldY), new Vec2(150, 30)),
                 new Model(Geometries.SQUARE),
                 new Shader(ShaderPrograms.BASIC),
                 new FlatColor(Color.red()),

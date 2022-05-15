@@ -7,66 +7,71 @@ import { Wall } from '../entity/wall.entity';
 export const GAME_STATE = new State({
     name: 'game',
     init: (game) => {
+        game.world.clearEntities();
+
+        // unpack some data
+        const worldX = game.world.dimensions.x / 2;
+        const worldY = game.world.dimensions.y / 2;
+        const wallSize = game.getData<number>('wallSize');
+        const brickRows = game.getData<number>('brickRows');
+        const brickColumns = game.getData<number>('brickColumns');
+        const brickPadding = game.getData<number>('brickPadding');
+        const brickMargin = game.getData<number>('brickMargin');
+
+        // calculate brick size and placement information
+        const brickWidth = (worldX * 2 - wallSize * 2 - brickMargin * 2 - brickPadding * (brickColumns - 1)) / brickColumns;
+        const brickHeight = (worldY - wallSize - brickMargin - brickPadding * (brickRows - 1)) / brickRows;
+        const brickLimitLeft = -worldX + wallSize + brickMargin + brickWidth / 2;
+        const brickLimitRight = worldX - wallSize - brickMargin;
+        const brickLimitBottom = brickHeight / 2;
+        const brickLimitTop = worldY - wallSize - brickMargin;
+
+        // set up physics and collision
         game.addSystems(new Physics(), new Collision());
 
-        const wallSize = 20;
-        const [worldX, worldY] = [game.world.dimensions.x / 2, game.world.dimensions.y / 2];
+        // create bricks
+        const bricks = [];
+        for (let x = brickLimitLeft; x <= brickLimitRight; x += brickWidth + brickPadding) {
+            for (let y = brickLimitBottom; y <= brickLimitTop; y += brickHeight + brickPadding) {
+                bricks.push(new Brick(new Vec2(x, y), new Vec2(brickWidth, brickHeight)));
+            }
+        }
 
+        // add walls, paddle, ball and bricks to the world
         game.world.addEntities(
             new Wall(new Vec2(-worldX + wallSize / 2, 0), new Vec2(wallSize, game.world.dimensions.y), true),
             new Wall(new Vec2(worldX - wallSize / 2, 0), new Vec2(wallSize, game.world.dimensions.y), true),
             new Wall(new Vec2(0, worldY - wallSize / 2), new Vec2(game.world.dimensions.x, wallSize), false),
 
-            new Paddle(new Vec2(0, -worldY + wallSize * 2)),
-            new Ball()
+            new Paddle(worldY, wallSize),
+            new Ball(),
+
+            ...bricks
         );
-
-        const brickRows = 5;
-        const brickColumns = 10;
-        const brickPadding = 10;
-        const brickMargin = 75;
-        const brickY = 0;
-
-        const brickWidth = (worldX * 2 - wallSize * 2 - brickMargin * 2 - brickPadding * (brickColumns - 1)) / brickColumns;
-        const brickHeight = (worldY - wallSize - brickMargin - brickPadding * (brickRows - 1)) / brickRows;
-        const brickScale = new Vec2(brickWidth, brickHeight);
-
-        const limitLeft = -worldX + wallSize + brickMargin + brickWidth / 2;
-        const limitRight = worldX - wallSize - brickMargin;
-        const limitBottom = brickY + brickHeight / 2;
-        const limitTop = worldY - wallSize - brickMargin;
-
-        for (let x = limitLeft; x <= limitRight; x += brickWidth + brickPadding) {
-            for (let y = limitBottom; y <= limitTop; y += brickHeight + brickPadding) {
-                game.world.addEntity(new Brick(new Vec2(x, y), brickScale));
-            }
-        }
-
-        // set some global game data
-        game.setData('lives', 3);
-        game.setData('points', 0);
-        game.setData('wallSize', wallSize);
     },
     end: (game) => {
         game.text.clearEntities();
 
-        const paddle = game.world.filterEntitiesByTag('paddle');
-        const ball = game.world.filterEntitiesByTag('ball');
-
-        // remove just the paddle and ball(s) to keep the death screen looking nice
-        for (const e of [...paddle, ...ball]) {
-            game.world.removeEntity(e);
-        }
+        // remove just the bricks, paddles and balls
+        game.world.removeEntities(
+            ...game.world.filterEntitiesByTag('brick'),
+            ...game.world.filterEntitiesByTag('ball'),
+            ...game.world.filterEntitiesByTag('paddle')
+        );
     },
     tick: (game) => {
         game.text.clearEntities();
 
         const lives = game.getData<number>('lives');
-
         if (lives <= 0) {
             // game over
             game.switchToState('gameOver');
             return;
+        }
+
+        const brickCount = game.world.filterEntitiesByTag('brick').length;
+        if (brickCount <= 0) {
+            game.switchToState('win');
         }
 
         game.text.addString(

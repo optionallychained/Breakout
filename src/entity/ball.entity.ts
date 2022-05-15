@@ -47,6 +47,8 @@ export class Ball extends Entity {
         const transform = this.getComponent<Transform>('Transform');
 
         if (other.tag === 'paddle') {
+            // TODO only if hit top of paddle? - bounce off for left/right as brick?
+
             // invert y velocity for paddle
             transform.velocity.setY(-transform.velocity.y);
         }
@@ -59,6 +61,11 @@ export class Ball extends Entity {
             transform.velocity.setY(-transform.velocity.y);
         }
         else if (other.tag === 'brick') {
+            // TODO there are some edge cases associated with this logic
+            //   ball vel +y, side hit => weirdness
+            // also issue with multiple near-simultaneous collisions
+            //   vel inverts twice = "moves through groups"
+
             const ot = other.getComponent<Transform>('Transform');
 
             const leftHit = (
