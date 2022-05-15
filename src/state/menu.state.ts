@@ -1,4 +1,4 @@
-import { Color, State, Vec2 } from 'aura-2d';
+import { Color, Keys, State, Vec2 } from 'aura-2d';
 
 export const MENU_STATE = new State({
     name: 'menu',
@@ -9,5 +9,9 @@ export const MENU_STATE = new State({
     end: (game) => {
         game.text.clearEntities();
     },
-    tick: (game) => { }
+    tick: (game) => {
+        if (game.input.isKeyDown(Keys.SPACE)) {
+            game.switchToState('game');
+        }
+    }
 });
