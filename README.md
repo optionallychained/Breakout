@@ -9,7 +9,7 @@ https://optionallychained.github.io/Breakout
 
 
 ## TODO
-- [ ] refine/fix collisions
+- [x] refine/fix collisions
 - [ ] richer ball->paddle interactions
 - [ ] more complex points system
 - [ ] power ups/downs

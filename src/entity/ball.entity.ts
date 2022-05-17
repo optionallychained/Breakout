@@ -13,7 +13,7 @@ export class Ball extends Entity {
                 new Model(Geometries.CIRCLE),
                 new Shader(ShaderPrograms.BASIC),
                 new FlatColor(Color.white()),
-                new BoxCollider()
+                new BoxCollider(new Vec2(20, 20))
             ]
         });
     }
@@ -50,19 +50,19 @@ export class Ball extends Entity {
     }
 
     public onCollisionStart(game: Game, other: Entity): void {
-        const transform = this.getComponent<Transform>('Transform');
+        const ball = this.getComponent<Transform>('Transform');
 
         if (other.tag === 'paddle') {
             // TODO only if hit top of paddle? - bounce off for left/right as brick?
 
-            transform.velocity.setY(-transform.velocity.y);
+            ball.velocity.setY(-ball.velocity.y);
             game.setData('multiplier', 1);
         }
         else if (other.tag === 'wall-vert') {
-            transform.velocity.setX(-transform.velocity.x);
+            ball.velocity.setX(-ball.velocity.x);
         }
         else if (other.tag === 'wall-hor') {
-            transform.velocity.setY(-transform.velocity.y);
+            ball.velocity.setY(-ball.velocity.y);
         }
         else if (other.tag === 'brick') {
             // add points
@@ -77,32 +77,18 @@ export class Ball extends Entity {
             }
             this.didCollide = true;
 
-            // TODO there are some edge cases associated with this logic
-            //   eg: ball vel +y, side hit => weirdness
-            const ot = other.getComponent<Transform>('Transform');
+            const brick = other.getComponent<Transform>('Transform');
 
-            const leftHit = (
-                (transform.position.x < ot.position.x)
-                &&
-                (transform.position.y < ot.position.y + ot.scale.y / 2)
-                &&
-                (transform.position.y > ot.position.y - ot.scale.y / 2)
-            );
+            // direction from brick center => ball center
+            const offset = Vec2.normalize(Vec2.sub(ball.position, brick.position));
 
-            const rightHit = (
-                (transform.position.x > ot.position.x)
-                &&
-                (transform.position.y < ot.position.y + ot.scale.y / 2)
-                &&
-                (transform.position.y > ot.position.y - ot.scale.y / 2)
-            );
-
-            // invert x only for left or right side hit, y only for top or bottom hit
-            if (leftHit || rightHit) {
-                transform.velocity.setX(-transform.velocity.x);
+            // if the ball is on the right or left of the brick, the y offset will be small enough to round to 0
+            // this will be true as long as the bricks and balls do not differ too greatly in height
+            if (Math.round(offset.y) === 0) {
+                ball.velocity.setX(-ball.velocity.x);
             }
             else {
-                transform.velocity.setY(-transform.velocity.y);
+                ball.velocity.setY(-ball.velocity.y);
             }
         }
     }
