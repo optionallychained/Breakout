@@ -3,6 +3,7 @@ import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader,
 export class Ball extends Entity {
 
     private attached = true;
+    private didCollide = false;
 
     constructor() {
         super({
@@ -43,6 +44,9 @@ export class Ball extends Entity {
                 game.setData('multiplier', 1);
             }
         }
+
+        // always reset same-frame collision-cancelling mechanism
+        this.didCollide = false;
     }
 
     public onCollisionStart(game: Game, other: Entity): void {
@@ -51,25 +55,30 @@ export class Ball extends Entity {
         if (other.tag === 'paddle') {
             // TODO only if hit top of paddle? - bounce off for left/right as brick?
 
-            // invert y velocity for paddle
             transform.velocity.setY(-transform.velocity.y);
-
-            // reset points multiplier
             game.setData('multiplier', 1);
         }
         else if (other.tag === 'wall-vert') {
-            // invert x velocity for vertical wall
             transform.velocity.setX(-transform.velocity.x);
         }
         else if (other.tag === 'wall-hor') {
-            // invert y velocity for horizontal wall
             transform.velocity.setY(-transform.velocity.y);
         }
         else if (other.tag === 'brick') {
+            // add points
+            // every brick hit in sequence (between paddle hits) yields more points
+            const multiplier = game.getData<number>('multiplier');
+            game.setData('points', game.getData<number>('points') + multiplier);
+            game.setData('multiplier', multiplier + 1);
+
+            // cancel velocity changes for second+ of multiple collisions on a single frame
+            if (this.didCollide) {
+                return;
+            }
+            this.didCollide = true;
+
             // TODO there are some edge cases associated with this logic
             //   eg: ball vel +y, side hit => weirdness
-            // also issue with multiple near-simultaneous collisions
-
             const ot = other.getComponent<Transform>('Transform');
 
             const leftHit = (
@@ -93,15 +102,8 @@ export class Ball extends Entity {
                 transform.velocity.setX(-transform.velocity.x);
             }
             else {
-                // always invert y
                 transform.velocity.setY(-transform.velocity.y);
             }
-
-            // add points
-            // every brick hit in sequence (between paddle hits) yields more points
-            const multiplier = game.getData<number>('multiplier');
-            game.setData('points', game.getData<number>('points') + multiplier);
-            game.setData('multiplier', multiplier + 1);
         }
     }
 

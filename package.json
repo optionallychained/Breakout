@@ -8,7 +8,7 @@
         "deploy": "npm run build && gh-pages -d dist"
     },
     "dependencies": {
-        "aura-2d": "^0.14.1"
+        "aura-2d": "^0.14.2"
     },
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "^5.11.0",
