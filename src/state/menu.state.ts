@@ -3,7 +3,7 @@ import { Color, State, Vec2 } from 'aura-2d';
 export const MENU_STATE = new State({
     name: 'menu',
     init: (game) => {
-        const str1 = 'breakout', str2 = 'press space';
+        const str1 = 'breakout', str2 = 'click';
 
         game.text.addString(
             str1,
@@ -14,12 +14,10 @@ export const MENU_STATE = new State({
 
         game.text.addString(
             str2,
-            new Vec2(-str2.length / 2 * 50, -game.world.dimensions.y / 4),
+            new Vec2(-str2.length / 2 * 50, -game.world.dimensions.y / 4 + 30),
             new Vec2(50, 50),
             Color.white()
         );
-
-        game.setData('mouseDisable', false);
     },
     end: (game) => {
         game.text.clearEntities();

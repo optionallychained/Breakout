@@ -1,4 +1,4 @@
-import { Collision, Color, Physics, State, Transform, Vec2 } from 'aura-2d';
+import { Collision, Color, Physics, State, Vec2 } from 'aura-2d';
 import { Ball } from '../entity/ball.entity';
 import { Brick } from '../entity/brick.entity';
 import { Paddle } from '../entity/paddle.entity';
@@ -93,13 +93,12 @@ export const GAME_STATE = new State({
             if (ball.isAttached()) {
                 game.text.addString(
                     'click',
-                    new Vec2(-2.5 * 40, -game.world.dimensions.y / 4 + 30),
-                    new Vec2(40, 40),
+                    new Vec2(-2.5 * 50, -game.world.dimensions.y / 4 + 30),
+                    new Vec2(50, 50),
                     Color.white()
                 );
 
                 if (game.input.isMouseDown() && !game.getData<boolean>('mouseDisable')) {
-                    ball.getComponent<Transform>('Transform').velocity.set(300, 300);
                     ball.toggleAttached();
                 }
             }
