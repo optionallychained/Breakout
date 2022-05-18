@@ -1,11 +1,19 @@
 import { Collision, Color, Physics, State, Vec2 } from 'aura-2d';
 import { Ball } from '../entity/ball.entity';
 
+// TODO hacky
+let showGo: boolean;
+let time: number;
+const maxTime = 500;
+
 export const GAME_STATE = new State({
     name: 'game',
     init: (game) => {
         // set up physics and collision
         game.addSystems(new Physics(), new Collision());
+
+        showGo = true;
+        time = 0;
     },
     end: (game) => {
         game.text.clearEntities();
@@ -16,12 +24,29 @@ export const GAME_STATE = new State({
             ...game.world.filterEntitiesByTag('ball'),
             ...game.world.filterEntitiesByTag('paddle')
         );
+
+        game.removeSystems('Physics', 'Collision');
     },
-    tick: (game) => {
+    tick: (game, frameDelta) => {
         game.text.clearEntities();
 
-        if (!game.input.isMouseDown()) {
+        if (game.getData<boolean>('mouseDisable') && !game.input.isMouseDown()) {
             game.setData('mouseDisable', false);
+        }
+
+        // TODO hacky
+        if (showGo) {
+            game.text.addString(
+                'go',
+                new Vec2(-50, -game.world.dimensions.y / 4 + 30),
+                new Vec2(50, 50),
+                Color.white()
+            );
+
+            time += frameDelta;
+            if (time >= maxTime) {
+                showGo = false;
+            }
         }
 
         // death condition

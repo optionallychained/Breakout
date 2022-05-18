@@ -4,7 +4,8 @@ import { Brick } from '../entity/brick.entity';
 import { Paddle } from '../entity/paddle.entity';
 import { Wall } from '../entity/wall.entity';
 
-const entities: Array<Entity> = [];
+const bricks: Array<Entity> = [];
+let ball: Ball;
 
 export const GAME_SETUP_STATE = new State({
     name: 'gameSetup',
@@ -33,34 +34,43 @@ export const GAME_SETUP_STATE = new State({
         const brickLimitBottom = brickHeight / 2;
         const brickLimitTop = worldY - wallSize - brickMargin;
 
-        // create bricks
-        const bricks = [];
+        // queue bricks
         for (let y = brickLimitBottom; y <= brickLimitTop; y += brickHeight + brickPadding) {
             const color = Color.random();
             for (let x = brickLimitLeft; x <= brickLimitRight; x += brickWidth + brickPadding) {
                 bricks.push(new Brick(new Vec2(x, y), new Vec2(brickWidth, brickHeight), color));
             }
         }
+        bricks.reverse();
 
-        // order entities into queue
-        entities.push(
-            new Ball(),
+        // add ball, paddle and walls directly to the game
+        ball = new Ball();
+        game.world.addEntities(
+            ball,
             new Paddle(worldY, wallSize),
-            ...bricks.reverse(),
-
             new Wall(new Vec2(-worldX + wallSize / 2, 0), new Vec2(wallSize, game.world.dimensions.y), true),
             new Wall(new Vec2(worldX - wallSize / 2, 0), new Vec2(wallSize, game.world.dimensions.y), true),
             new Wall(new Vec2(0, worldY - wallSize / 2), new Vec2(game.world.dimensions.x, wallSize), false),
         );
+
+        game.text.addString(
+            'ready',
+            new Vec2(-2.5 * 50, -game.world.dimensions.y / 4 + 30),
+            new Vec2(50, 50),
+            Color.white()
+        );
     },
-    end: () => { },
+    end: (game) => {
+        game.text.clearEntities();
+    },
     tick: (game) => {
-        const e = entities.pop();
+        const e = bricks.pop();
 
         if (e) {
             game.world.addEntity(e);
         }
         else {
+            ball.toggleAttached();
             game.switchToState('game');
         }
     }
