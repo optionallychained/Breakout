@@ -9,7 +9,7 @@ export class Wall extends Entity {
                 new Transform(position, scale),
                 new Model(Geometries.SQUARE),
                 new Shader(ShaderPrograms.BASIC),
-                new FlatColor(Color.green()),
+                new FlatColor(Color.rgba(50, 255, 75)),
                 new BoxCollider()
             ]
         });

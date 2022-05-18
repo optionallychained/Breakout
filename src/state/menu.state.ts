@@ -25,7 +25,7 @@ export const MENU_STATE = new State({
     tick: (game) => {
         if (game.input.isMouseDown()) {
             game.setData('mouseDisable', true);
-            game.switchToState('game');
+            game.switchToState('gameSetup');
         }
     }
 });

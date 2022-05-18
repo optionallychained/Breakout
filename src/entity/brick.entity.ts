@@ -2,14 +2,14 @@ import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader,
 
 export class Brick extends Entity {
 
-    constructor(position: Vec2, scale: Vec2) {
+    constructor(position: Vec2, scale: Vec2, color: Color) {
         super({
             tag: 'brick',
             components: [
                 new Transform(position, scale),
                 new Model(Geometries.SQUARE),
                 new Shader(ShaderPrograms.BASIC),
-                new FlatColor(Color.random()),
+                new FlatColor(color),
                 new BoxCollider()
             ]
         });
