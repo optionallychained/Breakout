@@ -64,6 +64,8 @@ export class Ball extends Entity {
         else if (other.tag === 'paddle') {
             game.setData('multiplier', 1);
 
+            const offset = Vec2.normalize(Vec2.sub(ball.position, ot.position));
+            velMultX = Math.abs(offset.x * 2);
             velMultY = -1;
 
             // increase speed a little
@@ -75,7 +77,7 @@ export class Ball extends Entity {
                 ||
                 (ball.position.x >= ot.position.x + ot.scale.x / 8 && ball.velocity.x < 0)
             ) {
-                velMultX = -1;
+                velMultX = -velMultX;
             }
         }
         else if (other.tag === 'brick') {
