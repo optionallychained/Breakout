@@ -30,10 +30,6 @@ export const GAME_STATE = new State({
     tick: (game, frameDelta) => {
         game.text.clearEntities();
 
-        if (game.getData<boolean>('mouseDisable') && !game.input.isMouseDown()) {
-            game.setData('mouseDisable', false);
-        }
-
         // TODO hacky
         if (showGo) {
             game.text.addString(
@@ -76,7 +72,7 @@ export const GAME_STATE = new State({
                     Color.white()
                 );
 
-                if (game.input.isMouseDown() && !game.getData<boolean>('mouseDisable')) {
+                if (game.input.isMouseDown()) {
                     ball.toggleAttached();
                 }
             }

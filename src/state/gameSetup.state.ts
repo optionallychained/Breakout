@@ -13,7 +13,7 @@ export const GAME_SETUP_STATE = new State({
         game.world.clearEntities();
 
         // per-game data
-        game.setData('balls', 1);
+        game.setData('balls', 2);
         game.setData('points', 0);
         game.setData('multiplier', 1);
 

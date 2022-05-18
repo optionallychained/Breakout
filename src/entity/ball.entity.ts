@@ -5,7 +5,7 @@ export class Ball extends Entity {
     private attached = true;
     private didCollide = false;
     private defaultVelocity = new Vec2(300, 300);
-    private maxVelocity = new Vec2(500, 500);
+    private maxVelocity = new Vec2(550, 550);
 
     constructor() {
         super({
@@ -52,29 +52,31 @@ export class Ball extends Entity {
         const ball = this.getComponent<Transform>('Transform');
         const ot = other.getComponent<Transform>('Transform');
 
+        // velocity changes
+        let velMultX = 1, velMultY = 1, velChange = 0;
+
         if (other.tag === 'wall-vert') {
-            this.applyVelocityMultiplier(-1, 1);
+            velMultX = -1;
         }
         else if (other.tag === 'wall-hor') {
-            this.applyVelocityMultiplier(1, -1);
+            velMultY = -1;
         }
         else if (other.tag === 'paddle') {
             game.setData('multiplier', 1);
 
+            velMultY = -1;
+
             // increase speed a little
-            let multX = 1.05;
+            velChange = 10;
 
-            // reverse ball if...
-            if (ball.position.x <= ot.position.x - ot.scale.x / 8 && ball.velocity.x > 0) {
-                // ball hits left side of paddle and is moving right
-                multX *= -1;
+            // reverse ball if hit left + moving right or hit right + moving left
+            if (
+                (ball.position.x <= ot.position.x - ot.scale.x / 8 && ball.velocity.x > 0)
+                ||
+                (ball.position.x >= ot.position.x + ot.scale.x / 8 && ball.velocity.x < 0)
+            ) {
+                velMultX = -1;
             }
-            else if (ball.position.x >= ot.position.x + ot.scale.x / 8 && ball.velocity.x < 0) {
-                // ball hits right side of paddle and is moving left
-                multX *= -1;
-            }
-
-            this.applyVelocityMultiplier(multX, -1.05);
         }
         else if (other.tag === 'brick') {
             // add points
@@ -90,19 +92,24 @@ export class Ball extends Entity {
             this.didCollide = true;
 
             // TODO this still has edge cases; mostly corner hits
-
             // direction from brick center => ball center
             const offset = Vec2.normalize(Vec2.sub(ball.position, ot.position));
 
             // if the ball is on the right or left of the brick, the y offset will be small enough to round to 0
             // this will be true as long as the bricks and balls do not differ too greatly in height
             if (Math.round(offset.y) === 0) {
-                this.applyVelocityMultiplier(-1, 1);
+                velMultX = -1;
             }
             else {
-                this.applyVelocityMultiplier(1, -1);
+                velMultY = -1;
             }
+
+            // increase speed a little
+            velChange = 10;
         }
+
+        this.changeVelocity(velChange);
+        this.applyVelocityMultipliers(velMultX, velMultY);
     }
 
     public isAttached(): boolean {
@@ -122,18 +129,35 @@ export class Ball extends Entity {
         }
     }
 
-    public applyVelocityMultiplier(x: number, y: number): void {
+    private changeVelocity(delta: number): void {
         const transform = this.getComponent<Transform>('Transform');
-        const newVelocity = Vec2.mult(transform.velocity, new Vec2(x, y));
-
-        // clamp velocities to max, preserve sign
-        if (Math.abs(newVelocity.x) >= Math.abs(this.maxVelocity.x)) {
-            newVelocity.setX(newVelocity.x > 0 ? this.maxVelocity.x : -this.maxVelocity.x);
-        }
-        if (Math.abs(newVelocity.y) >= Math.abs(this.maxVelocity.y)) {
-            newVelocity.setY(newVelocity.y > 0 ? this.maxVelocity.y : -this.maxVelocity.y);
-        }
+        const newVelocity = this.getClampedVelocity(
+            new Vec2(
+                transform.velocity.x > 0 ? transform.velocity.x + delta : transform.velocity.x - delta,
+                transform.velocity.y > 0 ? transform.velocity.y + delta : transform.velocity.y - delta,
+            )
+        );
 
         transform.velocity.set(newVelocity.x, newVelocity.y);
+    }
+
+    private applyVelocityMultipliers(x: number, y: number): void {
+        const transform = this.getComponent<Transform>('Transform');
+        const newVelocity = this.getClampedVelocity(Vec2.mult(transform.velocity, new Vec2(x, y)));
+
+        transform.velocity.set(newVelocity.x, newVelocity.y);
+    }
+
+    private getClampedVelocity(newVelocity: Vec2): Vec2 {
+        const clamped = newVelocity.clone();
+
+        if (Math.abs(clamped.x) >= Math.abs(this.maxVelocity.x)) {
+            clamped.setX(clamped.x > 0 ? this.maxVelocity.x : -this.maxVelocity.x);
+        }
+        if (Math.abs(clamped.y) >= Math.abs(this.maxVelocity.y)) {
+            clamped.setY(newVelocity.y > 0 ? this.maxVelocity.y : -this.maxVelocity.y);
+        }
+
+        return clamped;
     }
 }
