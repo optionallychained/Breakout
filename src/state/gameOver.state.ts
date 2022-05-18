@@ -1,4 +1,4 @@
-import { Color, Keys, State, Vec2 } from 'aura-2d';
+import { Color, State, Vec2 } from 'aura-2d';
 
 export const GAME_OVER_STATE = new State({
     name: 'gameOver',
@@ -31,7 +31,8 @@ export const GAME_OVER_STATE = new State({
         game.world.clearEntities();
     },
     tick: (game) => {
-        if (game.input.isKeyDown(Keys.SPACE)) {
+        if (game.input.isMouseDown()) {
+            game.setData('mouseDisable', true);
             game.switchToState('game');
         }
     }

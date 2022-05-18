@@ -67,6 +67,10 @@ export const GAME_STATE = new State({
     tick: (game) => {
         game.text.clearEntities();
 
+        if (!game.input.isMouseDown()) {
+            game.setData('mouseDisable', false);
+        }
+
         // death condition
         const balls = game.getData<number>('balls');
         if (balls <= 0) {
@@ -94,7 +98,7 @@ export const GAME_STATE = new State({
                     Color.white()
                 );
 
-                if (game.input.isMouseDown()) {
+                if (game.input.isMouseDown() && !game.getData<boolean>('mouseDisable')) {
                     ball.getComponent<Transform>('Transform').velocity.set(300, 300);
                     ball.toggleAttached();
                 }

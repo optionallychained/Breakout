@@ -6,7 +6,7 @@ import { WIN_STATE } from './state/win.state';
 
 const game = new Game({
     canvasDimensions: new Vec2(1024, 768),
-    controlScheme: 'both'
+    controlScheme: 'mouse'
 });
 
 game.registerShader(ShaderPrograms.BASIC);

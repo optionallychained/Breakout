@@ -1,4 +1,4 @@
-import { Color, Keys, State, Vec2 } from 'aura-2d';
+import { Color, State, Vec2 } from 'aura-2d';
 
 export const MENU_STATE = new State({
     name: 'menu',
@@ -18,12 +18,15 @@ export const MENU_STATE = new State({
             new Vec2(50, 50),
             Color.white()
         );
+
+        game.setData('mouseDisable', false);
     },
     end: (game) => {
         game.text.clearEntities();
     },
     tick: (game) => {
-        if (game.input.isKeyDown(Keys.SPACE)) {
+        if (game.input.isMouseDown()) {
+            game.setData('mouseDisable', true);
             game.switchToState('game');
         }
     }
