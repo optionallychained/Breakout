@@ -1,4 +1,5 @@
 import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
+import { Coin } from './coin.entity';
 
 export class Brick extends Entity {
 
@@ -18,6 +19,10 @@ export class Brick extends Entity {
     public onCollisionStart(game: Game, other: Entity): void {
         if (other.tag === 'ball') {
             game.world.removeEntity(this);
+        }
+
+        if (Math.random() <= 0.075) {
+            game.world.addEntity(new Coin(this.getComponent<Transform>('Transform').position));
         }
     }
 }

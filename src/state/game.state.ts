@@ -18,7 +18,10 @@ export const GAME_STATE = new State({
     end: (game) => {
         game.text.clearEntities();
 
-        game.world.removeEntities(...game.world.filterEntitiesByTag('ball'));
+        game.world.removeEntities(
+            ...game.world.filterEntitiesByTag('ball'),
+            ...game.world.filterEntitiesByTag('coin')
+        );
 
         game.removeSystems('Physics', 'Collision');
     },
