@@ -3,6 +3,8 @@ import { Color, State, Vec2 } from 'aura-2d';
 export const WIN_STATE = new State({
     name: 'win',
     init: (game) => {
+        game.setData('level', 1);
+
         const str1 = 'you win', str2 = `points: ${game.getData<number>('points')}`, str3 = 'click';
 
         game.text.addString(
@@ -28,6 +30,7 @@ export const WIN_STATE = new State({
     },
     end: (game) => {
         game.text.clearEntities();
+        game.world.clearEntities();
     },
     tick: (game) => {
         if (game.input.isMouseDown()) {

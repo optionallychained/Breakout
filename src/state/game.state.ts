@@ -9,21 +9,16 @@ const maxTime = 500;
 export const GAME_STATE = new State({
     name: 'game',
     init: (game) => {
-        // set up physics and collision
         game.addSystems(new Physics(), new Collision());
 
+        // TODO hacky
         showGo = true;
         time = 0;
     },
     end: (game) => {
         game.text.clearEntities();
 
-        // remove just the bricks, paddles and balls
-        game.world.removeEntities(
-            ...game.world.filterEntitiesByTag('brick'),
-            ...game.world.filterEntitiesByTag('ball'),
-            ...game.world.filterEntitiesByTag('paddle')
-        );
+        game.world.removeEntities(...game.world.filterEntitiesByTag('ball'));
 
         game.removeSystems('Physics', 'Collision');
     },
@@ -32,9 +27,10 @@ export const GAME_STATE = new State({
 
         // TODO hacky
         if (showGo) {
+            const str = `level ${game.getData<number>('level')}`;
             game.text.addString(
-                'go',
-                new Vec2(-50, -game.world.dimensions.y / 4 + 30),
+                str,
+                new Vec2(str.length / 2 * -50, -game.world.dimensions.y / 4 + 30),
                 new Vec2(50, 50),
                 Color.white()
             );
@@ -42,21 +38,22 @@ export const GAME_STATE = new State({
             time += frameDelta;
             if (time >= maxTime) {
                 showGo = false;
+                time = 0;
             }
         }
 
         // death condition
         const balls = game.getData<number>('balls');
         if (balls <= 0) {
-            // game over
             game.switchToState('gameOver');
             return;
         }
 
-        // win condition
+        // level end condition
         const brickCount = game.world.filterEntitiesByTag('brick').length;
         if (brickCount <= 0) {
-            game.switchToState('win');
+            game.setData('level', game.getData<number>('level') + 1);
+            game.switchToState('gameSetup');
             return;
         }
 

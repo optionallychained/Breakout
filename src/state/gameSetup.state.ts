@@ -1,22 +1,14 @@
-import { Color, Entity, State, Vec2 } from 'aura-2d';
+import { Color, State, Vec2 } from 'aura-2d';
 import { Ball } from '../entity/ball.entity';
 import { Brick } from '../entity/brick.entity';
 import { Paddle } from '../entity/paddle.entity';
 import { Wall } from '../entity/wall.entity';
 
-const bricks: Array<Entity> = [];
-let ball: Ball;
+const bricks: Array<Brick> = [];
 
 export const GAME_SETUP_STATE = new State({
     name: 'gameSetup',
     init: (game) => {
-        game.world.clearEntities();
-
-        // per-game data
-        game.setData('balls', 2);
-        game.setData('points', 0);
-        game.setData('multiplier', 1);
-
         // unpack some data
         const worldX = game.world.dimensions.x / 2;
         const worldY = game.world.dimensions.y / 2;
@@ -43,15 +35,23 @@ export const GAME_SETUP_STATE = new State({
         }
         bricks.reverse();
 
-        // add ball, paddle and walls directly to the game
-        ball = new Ball();
-        game.world.addEntities(
-            ball,
-            new Paddle(worldY, wallSize),
-            new Wall(new Vec2(-worldX + wallSize / 2, 0), new Vec2(wallSize, game.world.dimensions.y), true),
-            new Wall(new Vec2(worldX - wallSize / 2, 0), new Vec2(wallSize, game.world.dimensions.y), true),
-            new Wall(new Vec2(0, worldY - wallSize / 2), new Vec2(game.world.dimensions.x, wallSize), false),
-        );
+        // add ball
+        game.world.addEntity(new Ball());
+
+        // if game is just starting, populate paddle and walls
+        if (game.getData<number>('level') === 1) {
+            game.setData('balls', 2);
+            game.setData('points', 0);
+            game.setData('multiplier', 1);
+
+            // add ball, paddle and walls directly to the game
+            game.world.addEntities(
+                new Paddle(worldY, wallSize),
+                new Wall(new Vec2(-worldX + wallSize / 2, 0), new Vec2(wallSize, game.world.dimensions.y), true),
+                new Wall(new Vec2(worldX - wallSize / 2, 0), new Vec2(wallSize, game.world.dimensions.y), true),
+                new Wall(new Vec2(0, worldY - wallSize / 2), new Vec2(game.world.dimensions.x, wallSize), false),
+            );
+        }
 
         game.text.addString(
             'ready',
@@ -64,13 +64,14 @@ export const GAME_SETUP_STATE = new State({
         game.text.clearEntities();
     },
     tick: (game) => {
+        // add bricks in sequence, then switch to game
         const e = bricks.pop();
 
         if (e) {
             game.world.addEntity(e);
         }
         else {
-            ball.toggleAttached();
+            (game.world.filterEntitiesByTag('ball')[0] as Ball).toggleAttached();
             game.switchToState('game');
         }
     }
