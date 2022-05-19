@@ -1,11 +1,13 @@
 import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
+import { Coin } from './coin.entity';
+import { PowerUp } from './powerup.entity';
 
 export class Ball extends Entity {
 
     private attached = true;
     private didCollide = false;
     private defaultVelocity = new Vec2(300, 300);
-    private maxVelocity = new Vec2(550, 550);
+    private maxVelocity = new Vec2(500, 500);
 
     // TODO the want for this as an accuracy workaround in collision resulution suggests either:
     //  1. collision detection should be predictive
@@ -47,6 +49,12 @@ export class Ball extends Entity {
 
                 // reset points multiplier
                 game.setData('multiplier', 1);
+
+                // delete any coins or powerups on the field
+                game.world.removeEntities(
+                    ...game.world.filterEntitiesByTag('powerup'),
+                    ...game.world.filterEntitiesByTag('coin')
+                );
             }
         }
 
@@ -116,6 +124,16 @@ export class Ball extends Entity {
 
             // increase speed a little
             velChange = 10;
+
+            // spawn powers/coins
+            const r = Math.random();
+            if (r <= 0.075) {
+                game.world.addEntity(new Coin(ot.position));
+            }
+            else if (r <= 0.15 && !game.world.filterEntitiesByTag('powerup').length) {
+                // only one power up at a time
+                game.world.addEntity(new PowerUp(ot.position));
+            }
         }
 
         this.changeVelocity(velChange);

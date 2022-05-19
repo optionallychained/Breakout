@@ -20,7 +20,8 @@ export const GAME_STATE = new State({
 
         game.world.removeEntities(
             ...game.world.filterEntitiesByTag('ball'),
-            ...game.world.filterEntitiesByTag('coin')
+            ...game.world.filterEntitiesByTag('coin'),
+            ...game.world.filterEntitiesByTag('powerup')
         );
 
         game.removeSystems('Physics', 'Collision');
