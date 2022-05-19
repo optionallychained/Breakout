@@ -7,6 +7,12 @@ export class Ball extends Entity {
     private defaultVelocity = new Vec2(300, 300);
     private maxVelocity = new Vec2(550, 550);
 
+    // TODO the want for this as an accuracy workaround in collision resulution suggests either:
+    //  1. collision detection should be predictive
+    //  2. collision methods should receive framedelta (allow for accurate backcycle of movement inside collision callback)
+    //    2a. framedelta should be accessible directly on the game
+    private previousPos = new Vec2();
+
     constructor() {
         super({
             tag: 'ball',
@@ -44,8 +50,8 @@ export class Ball extends Entity {
             }
         }
 
-        // always reset same-frame collision-cancelling mechanism
         this.didCollide = false;
+        this.previousPos.set(transform.position.x, transform.position.y);
     }
 
     public onCollisionStart(game: Game, other: Entity): void {
@@ -65,11 +71,9 @@ export class Ball extends Entity {
             game.setData('multiplier', 1);
 
             const offset = Vec2.normalize(Vec2.sub(ball.position, ot.position));
+
             velMultX = Math.abs(offset.x * 2);
             velMultY = -1;
-
-            // increase speed a little
-            velChange = 10;
 
             // reverse ball if hit left + moving right or hit right + moving left
             if (
@@ -79,6 +83,9 @@ export class Ball extends Entity {
             ) {
                 velMultX = -velMultX;
             }
+
+            // increase speed a little
+            velChange = 10;
         }
         else if (other.tag === 'brick') {
             // add points
@@ -93,13 +100,14 @@ export class Ball extends Entity {
             }
             this.didCollide = true;
 
-            // TODO this still has edge cases; mostly corner hits
-            // direction from brick center => ball center
-            const offset = Vec2.normalize(Vec2.sub(ball.position, ot.position));
+            // positional offsets between ball and brick as percentages of width and height
+            // use previousPos as an accuracy workaround
+            const offset = Vec2.sub(this.previousPos, ot.position);
+            const percentX = (Math.abs(offset.x) / ot.scale.x) * 100;
+            const percentY = (Math.abs(offset.y) / ot.scale.y) * 100;
 
-            // if the ball is on the right or left of the brick, the y offset will be small enough to round to 0
-            // this will be true as long as the bricks and balls do not differ too greatly in height
-            if (Math.round(offset.y) === 0) {
+            // if relatively more on x than on y, left/right hit; otherside, top/bottom hit
+            if (percentX >= percentY) {
                 velMultX = -1;
             }
             else {
