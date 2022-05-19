@@ -1,4 +1,5 @@
 import { Angle, BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
+import { Effect } from '../component/effect.component';
 
 export class PowerUp extends Entity {
 
@@ -10,7 +11,8 @@ export class PowerUp extends Entity {
                 new Model(Geometries.HEXAGON),
                 new Shader(ShaderPrograms.BASIC),
                 new FlatColor(Color.green()),
-                new BoxCollider()
+                new BoxCollider(),
+                new Effect()
             ]
         })
     }
@@ -29,6 +31,9 @@ export class PowerUp extends Entity {
     public onCollisionStart(game: Game, other: Entity): void {
         if (other.tag === 'paddle') {
             game.world.removeEntity(this);
+
+            this.getComponent<Effect>('Effect').activate(game);
+            game.setData('poweractive', true);
         }
     }
 }

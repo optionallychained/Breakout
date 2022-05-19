@@ -102,8 +102,8 @@ export class Ball extends Entity {
             game.setData('points', game.getData<number>('points') + multiplier);
             game.setData('multiplier', multiplier + 1);
 
-            // cancel velocity changes for second+ of multiple collisions on a single frame
-            if (this.didCollide) {
+            // cancel velocity changes + power/coin spawns for second+ of multiple collisions on a single frame or if ball is invincible
+            if (this.didCollide || this.hasComponent('Invincible')) {
                 return;
             }
             this.didCollide = true;
@@ -130,7 +130,7 @@ export class Ball extends Entity {
             if (r <= 0.075) {
                 game.world.addEntity(new Coin(ot.position));
             }
-            else if (r <= 0.15 && !game.world.filterEntitiesByTag('powerup').length) {
+            else if (r <= 0.15 && !game.world.filterEntitiesByTag('powerup').length && !game.getData<boolean>('poweractive')) {
                 // only one power up at a time
                 game.world.addEntity(new PowerUp(ot.position));
             }
