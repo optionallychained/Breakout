@@ -22,7 +22,8 @@
         "max-len": [
             "error",
             {
-                "code": 140
+                "code": 140,
+                "ignorePattern": "import"
             }
         ],
         "@typescript-eslint/no-empty-function": [

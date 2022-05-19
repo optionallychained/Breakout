@@ -2,7 +2,6 @@ import { Game, ShaderPrograms, Vec2 } from 'aura-2d';
 import { GAME_OVER_STATE } from './state/gameOver.state';
 import { GAME_STATE } from './state/game.state';
 import { MENU_STATE } from './state/menu.state';
-import { WIN_STATE } from './state/win.state';
 import { GAME_SETUP_STATE } from './state/gameSetup.state';
 
 const game = new Game({
@@ -20,5 +19,7 @@ game.setData('brickColumns', 10);
 game.setData('brickPadding', 10);
 game.setData('brickMargin', 75);
 
-game.addStates(MENU_STATE, GAME_SETUP_STATE, GAME_STATE, GAME_OVER_STATE, WIN_STATE);
+game.setData('level', 1);
+
+game.addStates(MENU_STATE, GAME_SETUP_STATE, GAME_STATE, GAME_OVER_STATE);
 game.start(MENU_STATE.name);

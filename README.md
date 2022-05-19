@@ -9,9 +9,11 @@ https://optionallychained.github.io/Breakout
 
 
 ## TODO
+
 - [x] refine/fix collisions
 - [x] richer ball->paddle interactions
 - [ ] more complex points system
 - [ ] power ups/downs
 - [ ] sounds
 - [ ] level progression (different layouts, penalties)
+- [ ] try to make state flow less messy/interdependent
