@@ -3,17 +3,11 @@ import { Power, powerups } from '../powers/power';
 
 export class Effect extends Component {
 
-    public readonly activate: Power['activate'];
-    public readonly deactivate: Power['deactivate'];
-    public readonly timeout: Power['timeout'];
+    public readonly power: Power;
 
     constructor() {
         super('Effect');
 
-        const power = powerups[Math.floor(Math.random() * powerups.length)];
-
-        this.activate = power.activate;
-        this.deactivate = power.deactivate;
-        this.timeout = power.timeout;
+        this.power = powerups[Math.floor(Math.random() * powerups.length)];
     }
 }

@@ -3,6 +3,7 @@ import { bigPaddle } from './up/bigpaddle.powerup';
 import { powerBall } from './up/powerball.powerup';
 
 export interface Power {
+    name: string,
     timeout: number,
     activate: (game: Game) => void,
     deactivate: (game: Game) => void
@@ -13,6 +14,4 @@ export const powerups: Array<Power> = [
     bigPaddle
 ];
 
-export const powerdowns: Array<Power> = [
-
-];
+export const powerdowns: Array<Power> = [];

@@ -20,7 +20,6 @@ game.setData('brickPadding', 10);
 game.setData('brickMargin', 75);
 
 game.setData('level', 1);
-game.setData('poweractive', false);
 
 game.addStates(MENU_STATE, GAME_SETUP_STATE, GAME_STATE, GAME_OVER_STATE);
 game.start(MENU_STATE.name);

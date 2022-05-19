@@ -1,18 +1,22 @@
 import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
+import { PowerHandler } from '../system/powerHandler.system';
 import { Coin } from './coin.entity';
 import { PowerUp } from './powerup.entity';
 
 export class Ball extends Entity {
 
+    // TODO turn this stuff into components?
     private attached = true;
     private didCollide = false;
+
+    // TODO makes more sense as part of Transform...
     private defaultVelocity = new Vec2(300, 300);
     private maxVelocity = new Vec2(500, 500);
 
     // TODO the want for this as an accuracy workaround in collision resulution suggests either:
     //  1. collision detection should be predictive
     //  2. collision methods should receive framedelta (allow for accurate backcycle of movement inside collision callback)
-    //    2a. framedelta should be accessible directly on the game
+    //    2a. framedelta should be accessible directly on the game?
     private previousPos = new Vec2();
 
     constructor() {
@@ -55,6 +59,9 @@ export class Ball extends Entity {
                     ...game.world.filterEntitiesByTag('powerup'),
                     ...game.world.filterEntitiesByTag('coin')
                 );
+
+                // deactivate any active powers
+                PowerHandler.deactivatePower(game);
             }
         }
 
@@ -130,7 +137,7 @@ export class Ball extends Entity {
             if (r <= 0.075) {
                 game.world.addEntity(new Coin(ot.position));
             }
-            else if (r <= 0.15 && !game.world.filterEntitiesByTag('powerup').length && !game.getData<boolean>('poweractive')) {
+            else if (r <= 0.15 && !game.world.filterEntitiesByTag('powerup').length && !PowerHandler.isPowerActive()) {
                 // only one power up at a time
                 game.world.addEntity(new PowerUp(ot.position));
             }

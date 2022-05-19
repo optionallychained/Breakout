@@ -1,5 +1,6 @@
 import { Collision, Color, Physics, State, Vec2 } from 'aura-2d';
 import { Ball } from '../entity/ball.entity';
+import { PowerHandler } from '../system/powerHandler.system';
 
 // TODO hacky
 let showGo: boolean;
@@ -9,7 +10,7 @@ const maxTime = 500;
 export const GAME_STATE = new State({
     name: 'game',
     init: (game) => {
-        game.addSystems(new Physics(), new Collision());
+        game.addSystems(new Physics(), new Collision(), new PowerHandler());
 
         // TODO hacky
         showGo = true;
@@ -24,7 +25,9 @@ export const GAME_STATE = new State({
             ...game.world.filterEntitiesByTag('powerup')
         );
 
-        game.removeSystems('Physics', 'Collision');
+        PowerHandler.deactivatePower(game);
+
+        game.removeSystems('Physics', 'Collision', 'PowerHandler');
     },
     tick: (game, frameDelta) => {
         game.text.clearEntities();
@@ -44,6 +47,16 @@ export const GAME_STATE = new State({
                 showGo = false;
                 time = 0;
             }
+        }
+
+        if (PowerHandler.isPowerActive()) {
+            const name = PowerHandler.activePowerName();
+            game.text.addString(
+                name,
+                new Vec2(-name.length / 2 * 50, -game.world.dimensions.y / 4 + 30),
+                new Vec2(50, 50),
+                Color.white()
+            );
         }
 
         // death condition

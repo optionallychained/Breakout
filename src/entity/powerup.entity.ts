@@ -1,5 +1,6 @@
 import { Angle, BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
 import { Effect } from '../component/effect.component';
+import { PowerHandler } from '../system/powerHandler.system';
 
 export class PowerUp extends Entity {
 
@@ -32,8 +33,7 @@ export class PowerUp extends Entity {
         if (other.tag === 'paddle') {
             game.world.removeEntity(this);
 
-            this.getComponent<Effect>('Effect').activate(game);
-            game.setData('poweractive', true);
+            PowerHandler.activatePower(this.getComponent<Effect>('Effect').power, game);
         }
     }
 }
