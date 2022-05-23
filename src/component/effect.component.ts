@@ -8,6 +8,17 @@ export class Effect extends Component {
     constructor() {
         super('Effect');
 
-        this.power = powerups[Math.floor(Math.random() * powerups.length)];
+        this.power = powerups[0];
+
+        const r = Math.random() * 100;
+        let count = 0;
+
+        for (const powerup of powerups) {
+            if (r <= count + powerup.chance) {
+                this.power = powerup;
+                break;
+            }
+            count += powerup.chance;
+        }
     }
 }
