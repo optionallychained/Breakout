@@ -1,6 +1,7 @@
 import { Game } from 'aura-2d';
 import { bigPaddle } from './up/bigpaddle.powerup';
 import { explosive } from './up/explosive.powerup';
+import { extraball } from './up/extraball.powerup';
 import { multiball } from './up/multiball.powerup';
 import { powerBall } from './up/powerball.powerup';
 
@@ -15,7 +16,8 @@ export const powerups: Array<Power> = [
     powerBall,
     bigPaddle,
     explosive,
-    multiball
+    multiball,
+    extraball
 ];
 
 export const powerdowns: Array<Power> = [];
