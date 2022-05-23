@@ -16,7 +16,7 @@ export class Brick extends Entity {
     }
 
     public onCollisionStart(game: Game, other: Entity): void {
-        if (other.tag === 'ball') {
+        if (other.tag.includes('ball') || other.tag === 'explosion') {
             game.world.removeEntity(this);
         }
     }

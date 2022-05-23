@@ -21,8 +21,10 @@ export const GAME_STATE = new State({
 
         game.world.removeEntities(
             ...game.world.filterEntitiesByTag('ball'),
+            ...game.world.filterEntitiesByTag('ball-multi'),
             ...game.world.filterEntitiesByTag('coin'),
-            ...game.world.filterEntitiesByTag('powerup')
+            ...game.world.filterEntitiesByTag('powerup'),
+            ...game.world.filterEntitiesByTag('explosion')
         );
 
         PowerHandler.deactivatePower(game);

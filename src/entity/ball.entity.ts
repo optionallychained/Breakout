@@ -1,6 +1,7 @@
 import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
 import { PowerHandler } from '../system/powerHandler.system';
 import { Coin } from './coin.entity';
+import { Explosion } from './explosion.entity';
 import { PowerUp } from './powerup.entity';
 
 export class Ball extends Entity {
@@ -19,14 +20,14 @@ export class Ball extends Entity {
     //    2a. framedelta should be accessible directly on the game?
     private previousPos = new Vec2();
 
-    constructor() {
+    constructor(private multi = false) {
         super({
-            tag: 'ball',
+            tag: `ball${multi ? '-multi' : ''}`,
             components: [
                 new Transform(new Vec2(), new Vec2(25, 25)),
                 new Model(Geometries.CIRCLE),
                 new Shader(ShaderPrograms.BASIC),
-                new FlatColor(Color.white()),
+                new FlatColor(multi ? Color.yellow() : Color.white()),
                 new BoxCollider(new Vec2(20, 20))
             ]
         });
@@ -44,24 +45,33 @@ export class Ball extends Entity {
 
                 transform.position.set(paddleTransform.position.x, yPos);
             }
+
+            if (this.multi) {
+                this.toggleAttached();
+            }
         }
         else {
             if (transform.position.y + transform.scale.y * 0.75 <= -game.world.dimensions.y / 2) {
-                // death
-                this.toggleAttached();
-                game.setData('balls', game.getData<number>('balls') - 1);
-
-                // reset points multiplier
-                game.setData('multiplier', 1);
-
-                // delete any coins or powerups on the field
-                game.world.removeEntities(
-                    ...game.world.filterEntitiesByTag('powerup'),
-                    ...game.world.filterEntitiesByTag('coin')
-                );
-
                 // deactivate any active powers
                 PowerHandler.deactivatePower(game);
+
+                if (this.multi) {
+                    game.world.removeEntity(this);
+                }
+                else {
+                    // death
+                    this.toggleAttached();
+                    game.setData('balls', game.getData<number>('balls') - 1);
+
+                    // reset points multiplier
+                    game.setData('multiplier', 1);
+
+                    // delete any coins or powerups on the field
+                    game.world.removeEntities(
+                        ...game.world.filterEntitiesByTag('powerup'),
+                        ...game.world.filterEntitiesByTag('coin')
+                    );
+                }
             }
         }
 
@@ -83,7 +93,9 @@ export class Ball extends Entity {
             velMultY = -1;
         }
         else if (other.tag === 'paddle') {
-            game.setData('multiplier', 1);
+            if (!this.multi) {
+                game.setData('multiplier', 1);
+            }
 
             const offset = Vec2.normalize(Vec2.sub(ball.position, ot.position));
 
@@ -140,6 +152,10 @@ export class Ball extends Entity {
             else if (r <= 0.15 && !game.world.filterEntitiesByTag('powerup').length && !PowerHandler.isPowerActive()) {
                 // only one power up at a time
                 game.world.addEntity(new PowerUp(ot.position));
+            }
+
+            if (this.hasComponent('Explosive')) {
+                game.world.addEntity(new Explosion(ball.position, ball.scale));
             }
         }
 

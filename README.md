@@ -17,3 +17,4 @@ https://optionallychained.github.io/Breakout
 - [ ] sounds
 - [ ] level progression (different layouts, penalties)
 - [ ] try to make state flow less messy/interdependent
+- [ ] identify Aura improvements required to clean up game implementation
