@@ -2,7 +2,7 @@ import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader,
 import { PowerHandler } from '../system/powerHandler.system';
 import { Coin } from './coin.entity';
 import { Explosion } from './explosion.entity';
-import { PowerUp } from './powerup.entity';
+import { Power } from './power.entity';
 
 export class Ball extends Entity {
 
@@ -68,7 +68,7 @@ export class Ball extends Entity {
 
                     // delete any coins or powerups on the field
                     game.world.removeEntities(
-                        ...game.world.filterEntitiesByTag('powerup'),
+                        ...game.world.filterEntitiesByTag('power'),
                         ...game.world.filterEntitiesByTag('coin')
                     );
                 }
@@ -115,12 +115,6 @@ export class Ball extends Entity {
             velChange = 10;
         }
         else if (other.tag === 'brick') {
-            // add points
-            // every brick hit in sequence (between paddle hits) yields more points
-            const multiplier = game.getData<number>('multiplier');
-            game.setData('points', game.getData<number>('points') + multiplier);
-            game.setData('multiplier', multiplier + 1);
-
             // cancel velocity changes + power/coin spawns for second+ of multiple collisions on a single frame or if ball is invincible
             if (this.didCollide || this.hasComponent('Invincible')) {
                 return;
@@ -144,18 +138,21 @@ export class Ball extends Entity {
             // increase speed a little
             velChange = 10;
 
-            // spawn powers/coins
-            const r = Math.random();
-            if (r <= 0.075) {
-                game.world.addEntity(new Coin(ot.position));
-            }
-            else if (r <= 0.15 && !game.world.filterEntitiesByTag('powerup').length && !PowerHandler.isPowerActive()) {
-                // only one power up at a time
-                game.world.addEntity(new PowerUp(ot.position));
-            }
-
             if (this.hasComponent('Explosive')) {
                 game.world.addEntity(new Explosion(ball.position, ball.scale));
+            }
+
+            // snag: easier to do spawning here thanks to didCollide cancelling; harder to achieve in Brick
+            if (!other.hasComponent('Invincible')) {
+                // spawn powers/coins
+                const r = Math.random();
+                if (r <= 0.075) {
+                    game.world.addEntity(new Coin(ot.position));
+                }
+                else if (r <= 0.15 && !game.world.filterEntitiesByTag('power').length && !PowerHandler.isPowerActive()) {
+                    // only one power up at a time
+                    game.world.addEntity(new Power(ot.position));
+                }
             }
         }
 

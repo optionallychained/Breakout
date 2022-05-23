@@ -2,11 +2,11 @@ import { Angle, BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, 
 import { Effect } from '../component/effect.component';
 import { PowerHandler } from '../system/powerHandler.system';
 
-export class PowerUp extends Entity {
+export class Power extends Entity {
 
     constructor(position: Vec2) {
         super({
-            tag: 'powerup',
+            tag: 'power',
             components: [
                 new Transform(position, new Vec2(30, 30), 0, new Vec2(0, 0)),
                 new Model(Geometries.HEXAGON),

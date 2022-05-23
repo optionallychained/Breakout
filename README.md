@@ -12,9 +12,10 @@ https://optionallychained.github.io/Breakout
 
 - [x] refine/fix collisions
 - [x] richer ball->paddle interactions
-- [ ] more complex points system
-- [ ] power ups/downs
+- [x] more complex points system
+- [x] power ups/downs
+- [ ] brick variants
+- [ ] level progression (increasing brick variety; defined layouts?)
 - [ ] sounds
-- [ ] level progression (different layouts, penalties)
 - [ ] try to make state flow less messy/interdependent
-- [ ] identify Aura improvements required to clean up game implementation
+- [ ] identify Aura improvements required to clean up implementation/separate concerns better/encapsulate functionality better

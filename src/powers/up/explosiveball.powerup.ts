@@ -1,7 +1,7 @@
 import { Explosive } from '../../component/explosive.component';
 import { Power } from '../power';
 
-export const explosive: Power = {
+export const explosiveBall: Power = {
     name: 'Explosive Ball',
     timeout: 2500,
     chance: 20,
@@ -11,4 +11,4 @@ export const explosive: Power = {
     deactivate: (game) => {
         game.world.filterEntitiesByTag('ball')[0]?.removeComponent('Explosive');
     }
-}
+};

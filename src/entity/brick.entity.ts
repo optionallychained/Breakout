@@ -16,8 +16,14 @@ export class Brick extends Entity {
     }
 
     public onCollisionStart(game: Game, other: Entity): void {
-        if (other.tag.includes('ball') || other.tag === 'explosion') {
+        if (!this.hasComponent('Invincible') && (other.tag.includes('ball') || other.tag === 'explosion')) {
             game.world.removeEntity(this);
+
+            // add points
+            // every brick hit in sequence (between paddle hits) yields more points
+            const multiplier = game.getData<number>('multiplier');
+            game.setData('points', game.getData<number>('points') + multiplier);
+            game.setData('multiplier', multiplier + 1);
         }
     }
 }

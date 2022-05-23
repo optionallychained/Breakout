@@ -11,4 +11,4 @@ export const bigPaddle: Power = {
     deactivate: (game) => {
         game.world.filterEntitiesByTag('paddle')[0]?.getComponent<Transform>('Transform').scaleBy(new Vec2(0.5, 1));
     }
-}
+};

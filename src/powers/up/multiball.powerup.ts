@@ -1,7 +1,7 @@
 import { Ball } from '../../entity/ball.entity';
 import { Power } from '../power';
 
-export const multiball: Power = {
+export const multiBall: Power = {
     name: 'Multiball',
     timeout: 10000,
     chance: 15,
@@ -11,4 +11,4 @@ export const multiball: Power = {
     deactivate: (game) => {
         game.world.removeEntities(...game.world.filterEntitiesByTag('ball-multi'));
     }
-}
+};

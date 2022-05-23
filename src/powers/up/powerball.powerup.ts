@@ -11,4 +11,4 @@ export const powerBall: Power = {
     deactivate: (game) => {
         game.world.filterEntitiesByTag('ball')[0]?.removeComponent('Invincible');
     }
-}
+};

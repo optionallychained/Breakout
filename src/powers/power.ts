@@ -1,8 +1,12 @@
 import { Game } from 'aura-2d';
+import { flipped } from './down/flipped.powerdown';
+import { invincibleBricks } from './down/invinciblebricks.powerdown';
+import { reversePaddle } from './down/reversepaddle.powerdown';
+import { smallPaddle } from './down/smallpaddle.powerdown';
 import { bigPaddle } from './up/bigpaddle.powerup';
-import { explosive } from './up/explosive.powerup';
-import { extraball } from './up/extraball.powerup';
-import { multiball } from './up/multiball.powerup';
+import { explosiveBall } from './up/explosiveball.powerup';
+import { extraBall } from './up/extraball.powerup';
+import { multiBall } from './up/multiball.powerup';
 import { powerBall } from './up/powerball.powerup';
 
 export interface Power {
@@ -15,11 +19,17 @@ export interface Power {
 
 // powerups, sorted by chance ascending
 export const powerups: Array<Power> = [
-    powerBall,
     bigPaddle,
-    explosive,
-    multiball,
-    extraball
+    explosiveBall,
+    extraBall,
+    multiBall,
+    powerBall
 ].sort((a, b) => a.chance - b.chance);
 
-export const powerdowns: Array<Power> = [];
+// powerdowns, sorted by chance ascending
+export const powerdowns: Array<Power> = [
+    flipped,
+    invincibleBricks,
+    reversePaddle,
+    smallPaddle
+].sort((a, b) => a.chance - b.chance);

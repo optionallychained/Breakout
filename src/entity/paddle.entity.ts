@@ -23,9 +23,12 @@ export class Paddle extends Entity {
         const dimX = transform.scale.x;
         const wallSize = game.getData<number>('wallSize');
 
-        // move paddle with mouse, limit at screen edge
-        const x = Math.min(Math.max((dimX - worldX) * 0.5 + wallSize, mouseX - worldX / 2), (worldX - dimX) * 0.5 - wallSize);
+        // reverse controls if appropriate
+        const position = this.hasComponent('Reverse') ? worldX / 2 - mouseX : mouseX - worldX / 2;
 
-        this.getComponent<Transform>('Transform').position.setX(x);
+        // move paddle with mouse, limit at screen edge
+        this.getComponent<Transform>('Transform').position.setX(
+            Math.min(Math.max((dimX - worldX) * 0.5 + wallSize, position), (worldX - dimX) * 0.5 - wallSize)
+        );
     }
 }
