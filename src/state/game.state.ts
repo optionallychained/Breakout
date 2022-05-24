@@ -46,16 +46,6 @@ export const GAME_STATE = new State({
             }
         }
 
-        if (PowerHandler.isPowerActive()) {
-            const name = PowerHandler.activePowerName();
-            game.text.addString(
-                name,
-                new Vec2(-name.length / 2 * 50, -game.world.dimensions.y / 4 + 30),
-                new Vec2(50, 50),
-                Color.white()
-            );
-        }
-
         // death condition
         const balls = game.getData<number>('balls');
         if (balls <= 0) {

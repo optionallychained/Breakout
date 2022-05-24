@@ -5,6 +5,7 @@ export const explosiveBall: Power = {
     name: 'Explosive Ball',
     timeout: 2500,
     chance: 20,
+    up: true,
     activate: (game) => {
         game.world.filterEntitiesByTag('ball')[0]?.addComponent(new Explosive());
     },

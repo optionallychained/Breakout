@@ -5,6 +5,7 @@ export const bigPaddle: Power = {
     name: 'Big Paddle',
     timeout: 10000,
     chance: 30,
+    up: true,
     activate: (game) => {
         game.world.filterEntitiesByTag('paddle')[0]?.getComponent<Transform>('Transform').scaleBy(new Vec2(2, 1));
     },

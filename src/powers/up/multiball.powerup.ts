@@ -5,6 +5,7 @@ export const multiBall: Power = {
     name: 'Multiball',
     timeout: 10000,
     chance: 15,
+    up: true,
     activate: (game) => {
         game.world.addEntities(new Ball(true));
     },

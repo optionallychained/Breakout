@@ -10,11 +10,12 @@ import { multiBall } from './up/multiball.powerup';
 import { powerBall } from './up/powerball.powerup';
 
 export interface Power {
-    name: string,
-    timeout: number,
-    chance: number,
-    activate: (game: Game) => void,
-    deactivate: (game: Game) => void
+    name: string;
+    timeout: number;
+    chance: number;
+    up: boolean;
+    activate: (game: Game) => void;
+    deactivate: (game: Game) => void;
 }
 
 // powerups, sorted by chance ascending

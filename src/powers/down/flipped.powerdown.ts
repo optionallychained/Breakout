@@ -7,6 +7,7 @@ export const flipped: Power = {
     name: 'Flipped!',
     timeout: 3500,
     chance: 10,
+    up: false,
     activate: (game) => {
         game.world.activeCamera.rotate(Angle.toRadians(180));
         game.world.filterEntitiesByTag('paddle')[0]?.addComponent(new Reverse())
