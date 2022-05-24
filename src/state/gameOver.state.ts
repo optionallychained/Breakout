@@ -1,4 +1,5 @@
 import { Color, State, Vec2 } from 'aura-2d';
+import { brickTags } from '../entity/bricks/bricktags';
 
 export const GAME_OVER_STATE = new State({
     name: 'gameOver',
@@ -12,7 +13,7 @@ export const GAME_OVER_STATE = new State({
     tick: (game) => {
         game.text.clearEntities();
 
-        const bricks = game.world.filterEntitiesByTag('brick');
+        const bricks = game.world.filterEntitiesByTags(...brickTags);
         if (bricks.length) {
             game.world.removeEntity(bricks[bricks.length - 1]);
         }

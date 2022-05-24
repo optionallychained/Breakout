@@ -14,8 +14,9 @@ https://optionallychained.github.io/Breakout
 - [x] richer ball->paddle interactions
 - [x] more complex points system
 - [x] power ups/downs
-- [ ] brick variants
+- [x] brick variants
 - [ ] level progression (increasing brick variety; defined layouts?)
+- [ ] bonus levels
 - [ ] sounds
 - [ ] try to make state flow less messy/interdependent
 - [ ] identify Aura improvements required to clean up implementation/separate concerns better/encapsulate functionality better

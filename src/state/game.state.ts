@@ -1,5 +1,6 @@
 import { Collision, Color, Physics, State, Vec2 } from 'aura-2d';
 import { Ball } from '../entity/ball.entity';
+import { brickTags } from '../entity/bricks/bricktags';
 import { PowerHandler } from '../system/powerHandler.system';
 
 // TODO hacky
@@ -19,13 +20,7 @@ export const GAME_STATE = new State({
     end: (game) => {
         game.text.clearEntities();
 
-        game.world.removeEntities(
-            ...game.world.filterEntitiesByTag('ball'),
-            ...game.world.filterEntitiesByTag('ball-multi'),
-            ...game.world.filterEntitiesByTag('coin'),
-            ...game.world.filterEntitiesByTag('power'),
-            ...game.world.filterEntitiesByTag('explosion')
-        );
+        game.world.removeEntities(...game.world.filterEntitiesByTags('ball', 'ball-multi', 'coin', 'power', 'explosion'));
 
         PowerHandler.deactivatePower(game);
 
@@ -69,7 +64,7 @@ export const GAME_STATE = new State({
         }
 
         // level end condition
-        const brickCount = game.world.filterEntitiesByTag('brick').length;
+        const brickCount = game.world.filterEntitiesByTags(...brickTags).length;
         if (brickCount <= 0) {
             game.setData('level', game.getData<number>('level') + 1);
             game.switchToState('gameSetup');

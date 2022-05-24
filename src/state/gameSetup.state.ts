@@ -1,6 +1,10 @@
 import { Color, State, Vec2 } from 'aura-2d';
 import { Ball } from '../entity/ball.entity';
-import { Brick } from '../entity/brick.entity';
+import { Brick } from '../entity/bricks/abstractbrick.entity';
+import { GoldBrick } from '../entity/bricks/goldbrick.entity';
+import { HardBrick } from '../entity/bricks/hardbrick.entity';
+import { InvincibleBrick } from '../entity/bricks/invinciblebrick.entity';
+import { SimpleBrick } from '../entity/bricks/simplebrick.entity';
 import { Paddle } from '../entity/paddle.entity';
 import { Wall } from '../entity/wall.entity';
 
@@ -30,7 +34,10 @@ export const GAME_SETUP_STATE = new State({
         for (let y = brickLimitBottom; y <= brickLimitTop; y += brickHeight + brickPadding) {
             const color = Color.random();
             for (let x = brickLimitLeft; x <= brickLimitRight; x += brickWidth + brickPadding) {
-                bricks.push(new Brick(new Vec2(x, y), new Vec2(brickWidth, brickHeight), color));
+                // bricks.push(new GoldBrick(new Vec2(x, y), new Vec2(brickWidth, brickHeight)));
+                // bricks.push(new HardBrick(new Vec2(x, y), new Vec2(brickWidth, brickHeight), color));
+                // bricks.push(new InvincibleBrick(new Vec2(x, y), new Vec2(brickWidth, brickHeight)));
+                bricks.push(new SimpleBrick(new Vec2(x, y), new Vec2(brickWidth, brickHeight), color));
             }
         }
         bricks.reverse();
@@ -52,6 +59,12 @@ export const GAME_SETUP_STATE = new State({
                 new Wall(new Vec2(0, worldY - wallSize / 2), new Vec2(game.world.dimensions.x, wallSize), false),
             );
         }
+    },
+    end: (game) => {
+        game.text.clearEntities();
+    },
+    tick: (game) => {
+        game.text.clearEntities();
 
         game.text.addString(
             'ready',
@@ -59,11 +72,7 @@ export const GAME_SETUP_STATE = new State({
             new Vec2(50, 50),
             Color.white()
         );
-    },
-    end: (game) => {
-        game.text.clearEntities();
-    },
-    tick: (game) => {
+
         // add bricks in sequence, then switch to game
         const e = bricks.pop();
 

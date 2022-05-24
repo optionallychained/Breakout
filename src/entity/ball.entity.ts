@@ -1,8 +1,7 @@
 import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
 import { PowerHandler } from '../system/powerHandler.system';
-import { Coin } from './coin.entity';
+import { brickTags } from './bricks/bricktags';
 import { Explosion } from './explosion.entity';
-import { Power } from './power.entity';
 
 export class Ball extends Entity {
 
@@ -67,10 +66,7 @@ export class Ball extends Entity {
                     game.setData('multiplier', 1);
 
                     // delete any coins or powerups on the field
-                    game.world.removeEntities(
-                        ...game.world.filterEntitiesByTag('power'),
-                        ...game.world.filterEntitiesByTag('coin')
-                    );
+                    game.world.removeEntities(...game.world.filterEntitiesByTags('power', 'coin'));
                 }
             }
         }
@@ -114,7 +110,7 @@ export class Ball extends Entity {
             // increase speed a little
             velChange = 10;
         }
-        else if (other.tag === 'brick') {
+        else if (brickTags.includes(other.tag)) {
             // cancel velocity changes + power/coin spawns for second+ of multiple collisions on a single frame or if ball is invincible
             if (this.didCollide || this.hasComponent('Invincible')) {
                 return;
@@ -140,19 +136,6 @@ export class Ball extends Entity {
 
             if (this.hasComponent('Explosive')) {
                 game.world.addEntity(new Explosion(ball.position, ball.scale));
-            }
-
-            // snag: easier to do spawning here thanks to didCollide cancelling; harder to achieve in Brick
-            if (!other.hasComponent('Invincible')) {
-                // spawn powers/coins
-                const r = Math.random();
-                if (r <= 0.075) {
-                    game.world.addEntity(new Coin(ot.position));
-                }
-                else if (r <= 0.15 && !game.world.filterEntitiesByTag('power').length && !PowerHandler.isPowerActive()) {
-                    // only one power up at a time
-                    game.world.addEntity(new Power(ot.position));
-                }
             }
         }
 
