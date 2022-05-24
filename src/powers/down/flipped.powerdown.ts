@@ -5,7 +5,7 @@ import { Power } from '../power';
 // TODO might be nice to animate this?
 export const flipped: Power = {
     name: 'Flipped!',
-    timeout: 3500,
+    timeout: 5000,
     chance: 10,
     up: false,
     activate: (game) => {

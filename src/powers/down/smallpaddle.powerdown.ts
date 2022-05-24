@@ -4,12 +4,13 @@ import { Power } from '../power';
 export const smallPaddle: Power = {
     name: 'Small Paddle',
     timeout: 10000,
-    chance: 50,
+    chance: 40,
     up: false,
     activate: (game) => {
-        game.world.filterEntitiesByTag('paddle')[0]?.getComponent<Transform>('Transform').scaleBy(new Vec2(0.5, 1));
+        game.world.filterEntitiesByTag('paddle')[0]?.getComponent<Transform>('Transform').scaleBy(new Vec2(0.65, 1));
     },
     deactivate: (game) => {
-        game.world.filterEntitiesByTag('paddle')[0]?.getComponent<Transform>('Transform').scaleBy(new Vec2(2, 1));
+        const transform = game.world.filterEntitiesByTag('paddle')[0]!.getComponent<Transform>('Transform');
+        transform.scale.setX(transform.initialScale.x);
     }
 };

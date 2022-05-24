@@ -66,7 +66,7 @@ export class Ball extends Entity {
                     game.setData('multiplier', 1);
 
                     // delete any coins or powerups on the field
-                    game.world.removeEntities(...game.world.filterEntitiesByTags('power', 'coin'));
+                    game.world.removeEntities(...game.world.filterEntitiesByTags('power', 'coin', 'bullet'));
                 }
             }
         }

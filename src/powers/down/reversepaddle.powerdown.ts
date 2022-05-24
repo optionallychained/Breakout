@@ -4,7 +4,7 @@ import { Power } from '../power';
 export const reversePaddle: Power = {
     name: 'Reverse Paddle',
     timeout: 5000,
-    chance: 10,
+    chance: 20,
     up: false,
     activate: (game) => {
         game.world.filterEntitiesByTag('paddle')[0]?.addComponent(new Reverse())

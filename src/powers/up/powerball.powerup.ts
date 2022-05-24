@@ -4,7 +4,7 @@ import { Power } from '../power';
 export const powerBall: Power = {
     name: 'Power Ball',
     timeout: 5000,
-    chance: 15,
+    chance: 10,
     up: true,
     activate: (game) => {
         game.world.filterEntitiesByTag('ball')[0]?.addComponent(new Invincible());
