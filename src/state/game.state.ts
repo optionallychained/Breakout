@@ -3,19 +3,10 @@ import { Ball } from '../entity/ball.entity';
 import { brickTags } from '../entity/bricks/bricktags';
 import { PowerHandler } from '../system/powerHandler.system';
 
-// TODO hacky
-let showGo: boolean;
-let time: number;
-const maxTime = 500;
-
 export const GAME_STATE = new State({
     name: 'game',
     init: (game) => {
         game.addSystems(new Physics(), new Collision(), new PowerHandler());
-
-        // TODO hacky
-        showGo = true;
-        time = 0;
     },
     end: (game) => {
         game.text.clearEntities();
@@ -26,25 +17,8 @@ export const GAME_STATE = new State({
 
         game.removeSystems('Physics', 'Collision', 'PowerHandler');
     },
-    tick: (game, frameDelta) => {
+    tick: (game) => {
         game.text.clearEntities();
-
-        // TODO hacky
-        if (showGo) {
-            const str = `level ${game.getData<number>('level')}`;
-            game.text.addString(
-                str,
-                new Vec2(str.length / 2 * -50, -game.world.dimensions.y / 4 + 30),
-                new Vec2(50, 50),
-                Color.white()
-            );
-
-            time += frameDelta;
-            if (time >= maxTime) {
-                showGo = false;
-                time = 0;
-            }
-        }
 
         // death condition
         const balls = game.getData<number>('balls');

@@ -66,9 +66,10 @@ export const GAME_SETUP_STATE = new State({
     tick: (game) => {
         game.text.clearEntities();
 
+        const str = `level ${game.getData<number>('level')}`;
         game.text.addString(
-            'ready',
-            new Vec2(-2.5 * 50, -game.world.dimensions.y / 4 + 30),
+            str,
+            new Vec2(str.length / 2 * -50, -game.world.dimensions.y / 4 + 30),
             new Vec2(50, 50),
             Color.white()
         );
@@ -80,7 +81,10 @@ export const GAME_SETUP_STATE = new State({
             game.world.addEntity(e);
         }
         else {
-            (game.world.filterEntitiesByTag('ball')[0] as Ball).toggleAttached();
+            if (game.getData<number>('level') > 1) {
+                (game.world.filterEntitiesByTag('ball')[0] as Ball).toggleAttached();
+            }
+
             game.switchToState('game');
         }
     }

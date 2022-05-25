@@ -1,7 +1,6 @@
 import { Game, ShaderPrograms, Vec2 } from 'aura-2d';
 import { GAME_OVER_STATE } from './state/gameOver.state';
 import { GAME_STATE } from './state/game.state';
-import { MENU_STATE } from './state/menu.state';
 import { GAME_SETUP_STATE } from './state/gameSetup.state';
 
 const game = new Game({
@@ -23,5 +22,5 @@ game.setData('level', 1);
 
 game.canvas!.style.cursor = 'none';
 
-game.addStates(MENU_STATE, GAME_SETUP_STATE, GAME_STATE, GAME_OVER_STATE);
-game.start(MENU_STATE.name);
+game.addStates(GAME_SETUP_STATE, GAME_STATE, GAME_OVER_STATE);
+game.start(GAME_SETUP_STATE.name);
