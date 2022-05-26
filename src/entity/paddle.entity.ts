@@ -16,7 +16,6 @@ export class Paddle extends Entity {
     }
 
     public tick(game: Game): void {
-        // TODO it's possible to cheat by pausing, repositioning cursor, unpausing. How solve?
         if (game.getData<boolean>('paused')) {
             return;
         }
