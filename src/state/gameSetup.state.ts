@@ -12,6 +12,11 @@ import { levelPool } from '../levels/level';
 
 const bricks: Array<Brick> = [];
 
+// placement timer info; level setup time is made to be consistent across levels of differing sizes
+let time = 0;
+let interval = 0;
+const populateTime = 1500;
+
 export const GAME_SETUP_STATE = new State({
     name: 'gameSetup',
     init: (game) => {
@@ -76,6 +81,9 @@ export const GAME_SETUP_STATE = new State({
             y -= brickScale.y + brickPadding;
         }
 
+        // calculate placement interval
+        interval = populateTime / (bricks.length + 1);
+
         // add ball
         game.world.addEntity(new Ball());
 
@@ -96,8 +104,12 @@ export const GAME_SETUP_STATE = new State({
     },
     end: (game) => {
         game.text.clearEntities();
+
+        // reset placement timer info
+        time = 0;
+        interval = 0;
     },
-    tick: (game) => {
+    tick: (game, frameDelta) => {
         game.text.clearEntities();
 
         const str = `level ${game.getData<number>('level')}`;
@@ -108,18 +120,23 @@ export const GAME_SETUP_STATE = new State({
             Color.white()
         );
 
-        // add bricks in sequence, then switch to game
-        const e = bricks.pop();
+        // add bricks in sequence in [populateTime] ms, then switch to game
+        time += frameDelta;
+        if (time >= interval) {
+            time -= interval;
 
-        if (e) {
-            game.world.addEntity(e);
-        }
-        else {
-            if (game.getData<number>('level') > 1) {
-                (game.world.filterEntitiesByTag('ball')[0] as Ball).toggleAttached();
+            const b = bricks.pop();
+
+            if (b) {
+                game.world.addEntity(b);
             }
+            else {
+                if (game.getData<number>('level') > 1) {
+                    (game.world.filterEntitiesByTag('ball')[0] as Ball).toggleAttached();
+                }
 
-            game.switchToState('game');
+                game.switchToState('game');
+            }
         }
     }
 });

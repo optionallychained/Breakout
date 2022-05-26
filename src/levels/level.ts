@@ -3,7 +3,7 @@ import { ONE_ONE } from './1/1-1';
 import { TWO_ONE } from './2/2-1';
 import { THREE_ONE } from './3/3-1';
 
-// levels are represented as a 2d layout of short brick identifiers; hyphens indicate an empty space
+// levels are represented as a uniform 2d layout of short brick identifiers; hyphens indicate an empty space
 export type Level = Array<Array<BrickShortTag | '-'>>;
 
 // levels are organised into sets, with each set being the pool of available layouts for the current level, cycling in sets of 3
