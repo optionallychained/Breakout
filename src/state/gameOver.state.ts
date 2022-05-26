@@ -1,22 +1,35 @@
 import { Color, State, Vec2 } from 'aura-2d';
 import { brickTags } from '../entity/bricks/brickInfo';
 
+let time = 0;
+let interval = 0;
+const destroyTime = 750;
+
 export const GAME_OVER_STATE = new State({
     name: 'gameOver',
     init: (game) => {
         game.setData('level', 1);
         game.setData('levelCycle', 0);
+
+        interval = destroyTime / (game.world.filterEntitiesByTags(...brickTags).length + 1);
     },
     end: (game) => {
         game.text.clearEntities();
         game.world.clearEntities();
+        time = 0;
+        interval = 0;
     },
-    tick: (game) => {
+    tick: (game, frameDelta) => {
         game.text.clearEntities();
-
         const bricks = game.world.filterEntitiesByTags(...brickTags);
+
         if (bricks.length) {
-            game.world.removeEntity(bricks[bricks.length - 1]);
+            time += frameDelta;
+            if (time >= interval) {
+                time -= interval;
+
+                game.world.removeEntity(bricks[bricks.length - 1]);
+            }
         }
         else {
             if (game.input.isMouseDown()) {
