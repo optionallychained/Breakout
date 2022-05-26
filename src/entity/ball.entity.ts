@@ -1,6 +1,6 @@
 import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
 import { PowerHandler } from '../system/powerHandler.system';
-import { brickTags } from './bricks/bricktags';
+import { brickTags } from './bricks/brickInfo';
 import { Explosion } from './explosion.entity';
 
 export class Ball extends Entity {

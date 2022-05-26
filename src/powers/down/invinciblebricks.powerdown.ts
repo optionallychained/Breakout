@@ -1,5 +1,5 @@
 import { Invincible } from '../../component/invincible.component';
-import { brickTags } from '../../entity/bricks/bricktags';
+import { brickTags } from '../../entity/bricks/brickInfo';
 import { Power } from '../power';
 
 export const invincibleBricks: Power = {

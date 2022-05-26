@@ -4,3 +4,5 @@ export const brickTags = [
     'invinciblebrick',
     'simplebrick'
 ];
+
+export type BrickShortTag = 'g' | 'h' | 'i' | 's';

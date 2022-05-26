@@ -1,6 +1,6 @@
 import { Collision, Color, Keys, Physics, State, Transform, Vec2 } from 'aura-2d';
 import { Ball } from '../entity/ball.entity';
-import { brickTags } from '../entity/bricks/bricktags';
+import { brickTags } from '../entity/bricks/brickInfo';
 import { PowerHandler } from '../system/powerHandler.system';
 
 export const GAME_STATE = new State({
@@ -34,7 +34,14 @@ export const GAME_STATE = new State({
 
         // level end condition
         if (brickCount <= 0) {
-            game.setData('level', game.getData<number>('level') + 1);
+            let level = game.getData<number>('level');
+            const cycleCap = game.getData<number>('levelcyclecap');
+
+            if (level++ % cycleCap === 0) {
+                game.setData('levelcycle', game.getData<number>('levelcycle') + 1);
+            }
+
+            game.setData('level', level);
             game.switchToState('gameSetup');
             return;
         }

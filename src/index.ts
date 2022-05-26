@@ -11,14 +11,14 @@ const game = new Game({
 game.registerShader(ShaderPrograms.BASIC);
 game.registerShader(ShaderPrograms.TEXTURE_COLORED);
 
-// set-once data
+// set some data
 game.setData('wallSize', 20);
-game.setData('brickRows', 8);
-game.setData('brickColumns', 10);
 game.setData('brickPadding', 10);
 game.setData('brickMargin', 75);
-
 game.setData('level', 1);
+game.setData('levelcycle', 0);
+game.setData('levelcyclecap', 3);
+
 // TODO would be nice to have pause as a state, but may require a "to"/"from" in state end/init for conditional logic on gamestate
 game.setData('paused', false);
 

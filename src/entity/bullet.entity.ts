@@ -1,5 +1,5 @@
 import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
-import { brickTags } from './bricks/bricktags';
+import { brickTags } from './bricks/brickInfo';
 
 export class Bullet extends Entity {
 

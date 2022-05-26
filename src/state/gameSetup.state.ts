@@ -8,40 +8,73 @@ import { SimpleBrick } from '../entity/bricks/simplebrick.entity';
 import { Cursor } from '../entity/cursor.entity';
 import { Paddle } from '../entity/paddle.entity';
 import { Wall } from '../entity/wall.entity';
+import { levelPool } from '../levels/level';
 
 const bricks: Array<Brick> = [];
 
 export const GAME_SETUP_STATE = new State({
     name: 'gameSetup',
     init: (game) => {
+        // choose a level
+        const level = game.getData<number>('level');
+        const cycle = game.getData<number>('levelcycle');
+        const cycleCap = game.getData<number>('levelcyclecap');
+
+        const levelSet = levelPool[level - (cycle * cycleCap) - 1];
+        const selectedLevel = levelSet[Math.floor(Math.random() * levelSet.length)];
+
         // unpack some data
         const worldX = game.world.dimensions.x / 2;
         const worldY = game.world.dimensions.y / 2;
         const wallSize = game.getData<number>('wallSize');
-        const brickRows = game.getData<number>('brickRows');
-        const brickColumns = game.getData<number>('brickColumns');
         const brickPadding = game.getData<number>('brickPadding');
         const brickMargin = game.getData<number>('brickMargin');
+        const brickRows = selectedLevel.length;
+        const brickColumns = selectedLevel[0].length;
 
-        // calculate brick size and placement information
-        const brickWidth = (worldX * 2 - wallSize * 2 - brickMargin * 2 - brickPadding * (brickColumns - 1)) / brickColumns;
-        const brickHeight = (worldY - wallSize - brickMargin - brickPadding * (brickRows - 1)) / brickRows;
-        const brickLimitLeft = -worldX + wallSize + brickMargin + brickWidth / 2;
-        const brickLimitRight = worldX - wallSize - brickMargin;
-        const brickLimitBottom = brickHeight / 2;
-        const brickLimitTop = worldY - wallSize - brickMargin;
+        // calculate brick size and positional limits
+        const brickScale = new Vec2(
+            (worldX * 2 - wallSize * 2 - brickMargin * 2 - brickPadding * (brickColumns - 1)) / brickColumns,
+            (worldY - wallSize - brickMargin - brickPadding * (brickRows - 1)) / brickRows
+        );
+        const brickLimitRight = worldX - wallSize - brickMargin - brickScale.x / 2;
+        const brickLimitTop = worldY - wallSize - brickMargin - brickScale.y / 2;
 
-        // queue bricks
-        for (let y = brickLimitBottom; y <= brickLimitTop; y += brickHeight + brickPadding) {
-            const color = Color.random();
-            for (let x = brickLimitLeft; x <= brickLimitRight; x += brickWidth + brickPadding) {
-                // bricks.push(new GoldBrick(new Vec2(x, y), new Vec2(brickWidth, brickHeight)));
-                // bricks.push(new HardBrick(new Vec2(x, y), new Vec2(brickWidth, brickHeight), color));
-                // bricks.push(new InvincibleBrick(new Vec2(x, y), new Vec2(brickWidth, brickHeight)));
-                bricks.push(new SimpleBrick(new Vec2(x, y), new Vec2(brickWidth, brickHeight), color));
+        // make bricks
+        let y = brickLimitTop;
+        for (const row of selectedLevel) {
+            const rowColor = Color.random();
+            const rowBricks = [];
+            let x = brickLimitRight;
+
+            for (const brick of [...row].reverse()) {
+                const position = new Vec2(x, y);
+
+                switch (brick) {
+                    case 'g':
+                        rowBricks.push(new GoldBrick(position, brickScale));
+                        break;
+
+                    case 'h':
+                        rowBricks.push(new HardBrick(position, brickScale, rowColor));
+                        break;
+
+                    case 'i':
+                        rowBricks.push(new InvincibleBrick(position, brickScale));
+                        break;
+
+                    case 's':
+                        rowBricks.push(new SimpleBrick(position, brickScale, rowColor));
+                        break;
+                }
+
+                x -= brickScale.x + brickPadding;
             }
+
+            bricks.push(...rowBricks);
+
+            y -= brickScale.y + brickPadding;
         }
-        bricks.reverse();
 
         // add ball
         game.world.addEntity(new Ball());
@@ -52,7 +85,6 @@ export const GAME_SETUP_STATE = new State({
             game.setData('points', 0);
             game.setData('multiplier', 1);
 
-            // add ball, paddle and walls directly to the game
             game.world.addEntities(
                 new Paddle(worldY, wallSize),
                 new Wall(new Vec2(-worldX + wallSize / 2, 0), new Vec2(wallSize, game.world.dimensions.y), true),

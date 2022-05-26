@@ -1,5 +1,5 @@
 import { Color, State, Vec2 } from 'aura-2d';
-import { brickTags } from '../entity/bricks/bricktags';
+import { brickTags } from '../entity/bricks/brickInfo';
 
 export const GAME_OVER_STATE = new State({
     name: 'gameOver',
