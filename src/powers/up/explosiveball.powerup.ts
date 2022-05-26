@@ -3,7 +3,7 @@ import { Power } from '../power';
 
 export const explosiveBall: Power = {
     name: 'Explosive Ball',
-    timeout: 3000,
+    timeout: 5000,
     chance: 20,
     up: true,
     activate: (game) => {

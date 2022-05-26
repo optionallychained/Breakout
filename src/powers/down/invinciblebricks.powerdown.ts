@@ -4,7 +4,7 @@ import { Power } from '../power';
 
 export const invincibleBricks: Power = {
     name: 'Invincible Bricks',
-    timeout: 6500,
+    timeout: 6000,
     chance: 30,
     up: false,
     activate: (game) => {

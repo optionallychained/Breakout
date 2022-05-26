@@ -3,7 +3,7 @@ import { Power } from '../power';
 
 export const laser: Power = {
     name: 'Laser',
-    timeout: 2500,
+    timeout: 3000,
     chance: 10,
     up: true,
     activate: (game) => {

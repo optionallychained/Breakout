@@ -26,7 +26,7 @@ export class Ball extends Entity {
                 new Transform(new Vec2(), new Vec2(25, 25)),
                 new Model(Geometries.CIRCLE),
                 new Shader(ShaderPrograms.BASIC),
-                new FlatColor(multi ? Color.yellow() : Color.white()),
+                new FlatColor(multi ? Color.grey() : Color.white()),
                 new BoxCollider(new Vec2(20, 20))
             ]
         });
