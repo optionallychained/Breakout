@@ -5,7 +5,7 @@ import { GAME_SETUP_STATE } from './state/gameSetup.state';
 
 const game = new Game({
     canvasDimensions: new Vec2(1024, 768),
-    controlScheme: 'mouse'
+    controlScheme: 'both'
 });
 
 game.registerShader(ShaderPrograms.BASIC);
@@ -19,6 +19,8 @@ game.setData('brickPadding', 10);
 game.setData('brickMargin', 75);
 
 game.setData('level', 1);
+// TODO would be nice to have pause as a state, but may require a "to"/"from" in state end/init for conditional logic on gamestate
+game.setData('paused', false);
 
 game.canvas!.style.cursor = 'none';
 

@@ -27,21 +27,21 @@ export const GAME_OVER_STATE = new State({
 
             game.text.addString(
                 str1,
-                new Vec2(-str1.length / 2 * 50, game.world.dimensions.y / 4),
+                new Vec2(-(str1.length - 1) / 2 * 50, game.world.dimensions.y / 4),
                 new Vec2(50, 50),
                 Color.white()
             );
 
             game.text.addString(
                 str2,
-                new Vec2(-str2.length / 2 * 50, 0),
+                new Vec2(-(str2.length - 1) / 2 * 50, 0),
                 new Vec2(50, 50),
                 Color.white()
             );
 
             game.text.addString(
                 str3,
-                new Vec2(-str3.length / 2 * 50, -game.world.dimensions.y / 4 + 30),
+                new Vec2(-(str3.length - 1) / 2 * 50, -game.world.dimensions.y / 4 + 30),
                 new Vec2(50, 50),
                 Color.white()
             );

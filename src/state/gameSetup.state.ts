@@ -69,7 +69,7 @@ export const GAME_SETUP_STATE = new State({
         const str = `level ${game.getData<number>('level')}`;
         game.text.addString(
             str,
-            new Vec2(str.length / 2 * -50, -game.world.dimensions.y / 4 + 30),
+            new Vec2(-(str.length - 1) / 2 * 50, -game.world.dimensions.y / 4 + 60),
             new Vec2(50, 50),
             Color.white()
         );

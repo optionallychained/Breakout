@@ -1,4 +1,4 @@
-import { Collision, Color, Physics, State, Vec2 } from 'aura-2d';
+import { Collision, Color, Keys, Physics, State, Vec2 } from 'aura-2d';
 import { Ball } from '../entity/ball.entity';
 import { brickTags } from '../entity/bricks/bricktags';
 import { PowerHandler } from '../system/powerHandler.system';
@@ -20,40 +20,42 @@ export const GAME_STATE = new State({
     tick: (game) => {
         game.text.clearEntities();
 
-        // death condition
-        const balls = game.getData<number>('balls');
-        if (balls <= 0) {
-            game.switchToState('gameOver');
-            return;
-        }
-
-        // level end condition
-        const brickCount = game.world.filterEntitiesByTags(...brickTags).length;
-        if (brickCount <= 0) {
-            game.setData('level', game.getData<number>('level') + 1);
-            game.switchToState('gameSetup');
-            return;
-        }
-
         const ball = game.world.filterEntitiesByTag('ball')[0] as Ball;
-        const paddle = game.world.filterEntitiesByTag('paddle')[0];
+        const paused = game.getData<boolean>('paused');
+        const balls = game.getData<number>('balls');
+        const brickCount = game.world.filterEntitiesByTags(...brickTags).length;
+        let click = false;
 
-        if (ball && paddle) {
-            if (ball.isAttached()) {
-                game.text.addString(
-                    'click',
-                    new Vec2(-2.5 * 50, -game.world.dimensions.y / 4 + 30),
-                    new Vec2(50, 50),
-                    Color.white()
-                );
+        if (ball.isAttached()) {
+            click = true;
 
-                if (game.input.isMouseDown()) {
-                    ball.toggleAttached();
-                }
+            if (game.input.isMouseDown()) {
+                ball.toggleAttached();
             }
         }
 
+        if (paused) {
+            click = true;
+
+            if (game.input.isMouseDown()) {
+                game.setData('paused', false);
+                game.addSystems(new Physics(), new Collision());
+            }
+        }
+        else if (game.input.isKeyDown(Keys.ESC)) {
+            game.setData('paused', true);
+            game.removeSystems('Physics', 'Collision');
+        }
+
         // info readouts
+        if (click) {
+            game.text.addString(
+                'click',
+                new Vec2(-2 * 50, -game.world.dimensions.y / 4 + 60),
+                new Vec2(50, 50),
+                Color.white()
+            );
+        }
         game.text.addString(
             `balls: ${balls}`,
             new Vec2(-game.world.dimensions.x / 2 + 50, game.world.dimensions.y / 2 - 50),
@@ -66,5 +68,16 @@ export const GAME_STATE = new State({
             new Vec2(20, 20),
             Color.white()
         );
+
+        // death condition
+        if (balls <= 0) {
+            game.switchToState('gameOver');
+        }
+
+        // level end condition
+        if (brickCount <= 0) {
+            game.setData('level', game.getData<number>('level') + 1);
+            game.switchToState('gameSetup');
+        }
     }
 });

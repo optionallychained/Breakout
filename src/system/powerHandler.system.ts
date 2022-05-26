@@ -15,7 +15,7 @@ export class PowerHandler extends System {
         PowerHandler.activePower = power;
         power.activate(game);
 
-        PowerHandler.progressBar = new ProgressBar(new Vec2(0, -game.world.dimensions.y / 4 - 20), power.name.length * 50);
+        PowerHandler.progressBar = new ProgressBar(new Vec2(0, -game.world.dimensions.y / 4 - 70), power.name.length * 50);
         game.world.addEntity(PowerHandler.progressBar);
     }
 
@@ -40,23 +40,24 @@ export class PowerHandler extends System {
         if (PowerHandler.activePower && PowerHandler.progressBar) {
             game.text.addString(
                 PowerHandler.activePower.name,
-                // TODO why is this subtraction necessary only here and not for other strings???
-                new Vec2(-(PowerHandler.activePower.name.length - 1) / 2 * 50, -game.world.dimensions.y / 4 + 30),
+                new Vec2(-(PowerHandler.activePower.name.length - 1) / 2 * 50, -game.world.dimensions.y / 4 - 20),
                 new Vec2(50, 50),
                 PowerHandler.activePower.up ? Color.yellow() : Color.red()
             );
 
-            PowerHandler.time += frameDelta;
+            if (!game.getData<boolean>('paused')) {
+                PowerHandler.time += frameDelta;
 
-            // scale progressbar appropriately with time
-            const transform = PowerHandler.progressBar.getComponent<Transform>('Transform');
-            transform.scaleTo(new Vec2(
-                (PowerHandler.activePower.timeout - PowerHandler.time) / PowerHandler.activePower.timeout * transform.initialScale.x,
-                transform.initialScale.y
-            ));
+                // scale progressbar appropriately with time
+                const transform = PowerHandler.progressBar.getComponent<Transform>('Transform');
+                transform.scaleTo(new Vec2(
+                    (PowerHandler.activePower.timeout - PowerHandler.time) / PowerHandler.activePower.timeout * transform.initialScale.x,
+                    transform.initialScale.y
+                ));
 
-            if (PowerHandler.time >= PowerHandler.activePower.timeout) {
-                PowerHandler.deactivatePower(game);
+                if (PowerHandler.time >= PowerHandler.activePower.timeout) {
+                    PowerHandler.deactivatePower(game);
+                }
             }
         }
     }

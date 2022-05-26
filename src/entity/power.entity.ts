@@ -1,4 +1,4 @@
-import { Angle, BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
+import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
 import { Effect } from '../component/effect.component';
 import { PowerHandler } from '../system/powerHandler.system';
 
@@ -8,7 +8,7 @@ export class Power extends Entity {
         super({
             tag: 'power',
             components: [
-                new Transform(position, new Vec2(30, 30), 0, new Vec2(0, 0)),
+                new Transform(position, new Vec2(30, 30), 0, new Vec2(0, -100)),
                 new Model(Geometries.HEXAGON),
                 new Shader(ShaderPrograms.BASIC),
                 new FlatColor(Color.green()),
@@ -18,11 +18,8 @@ export class Power extends Entity {
         })
     }
 
-    public tick(game: Game, frameDelta: number): void {
+    public tick(game: Game): void {
         const transform = this.getComponent<Transform>('Transform');
-
-        transform.rotate(Angle.toRadians(1));
-        transform.translate(new Vec2(0, -100 * frameDelta / 1000));
 
         if (transform.position.y <= -game.world.dimensions.y / 2 - transform.scale.y / 2) {
             game.world.removeEntity(this);

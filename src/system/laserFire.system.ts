@@ -11,6 +11,10 @@ export class LaserFire extends System {
     }
 
     public tick(game: Game, frameDelta: number): void {
+        if (game.getData<boolean>('paused')) {
+            return;
+        }
+
         this.time += frameDelta;
 
         if (this.time >= this.interval) {

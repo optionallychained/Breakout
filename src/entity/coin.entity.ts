@@ -7,7 +7,7 @@ export class Coin extends Entity {
         super({
             tag: 'coin',
             components: [
-                new Transform(position, new Vec2(25, 25)),
+                new Transform(position, new Vec2(25, 25), 0, new Vec2(0, -150)),
                 new Model(Geometries.OCTAGON),
                 new Shader(ShaderPrograms.BASIC),
                 new FlatColor(Color.yellow()),
@@ -19,8 +19,6 @@ export class Coin extends Entity {
 
     public tick(game: Game, frameDelta: number): void {
         const transform = this.getComponent<Transform>('Transform');
-
-        transform.translate(new Vec2(0, -150 * frameDelta / 1000));
 
         if (transform.position.y <= -game.world.dimensions.y / 2 - transform.scale.y / 2) {
             game.world.removeEntity(this);
