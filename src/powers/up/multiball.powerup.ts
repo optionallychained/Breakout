@@ -3,13 +3,11 @@ import { Power } from '../power';
 
 export const multiBall: Power = {
     name: 'Multiball',
-    timeout: 10000,
+    timeout: 1500,
     chance: 15,
     up: true,
     activate: (game) => {
-        game.world.addEntities(new Ball(true));
+        game.world.addEntities(new Ball(true), new Ball(true, -1));
     },
-    deactivate: (game) => {
-        game.world.removeEntities(...game.world.filterEntitiesByTag('ball-multi'));
-    }
+    deactivate: () => { }
 };

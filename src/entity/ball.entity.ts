@@ -19,7 +19,7 @@ export class Ball extends Entity {
     //    2a. framedelta should be accessible directly on the game?
     private previousPos = new Vec2();
 
-    constructor(private multi = false) {
+    constructor(private multi = false, private dir = 1) {
         super({
             tag: `ball${multi ? '-multi' : ''}`,
             components: [
@@ -65,8 +65,8 @@ export class Ball extends Entity {
                     // reset points multiplier
                     game.setData('multiplier', 1);
 
-                    // delete any coins or powerups on the field
-                    game.world.removeEntities(...game.world.filterEntitiesByTags('power', 'coin', 'bullet'));
+                    // delete any coins or power-related entities on the field
+                    game.world.removeEntities(...game.world.filterEntitiesByTags('power', 'coin', 'bullet', 'ball-multi'));
                 }
             }
         }
@@ -155,8 +155,14 @@ export class Ball extends Entity {
             transform.velocity.set();
         }
         else {
-            // random start direction on x
-            transform.velocity.set(this.defaultVelocity.x * (Math.random() <= 0.5 ? -1 : 1), this.defaultVelocity.y);
+            if (this.multi) {
+                // set direction on x
+                transform.velocity.set(this.defaultVelocity.x * this.dir, this.defaultVelocity.y);
+            }
+            else {
+                // random start direction on x
+                transform.velocity.set(this.defaultVelocity.x * (Math.random() <= 0.5 ? -1 : 1), this.defaultVelocity.y);
+            }
         }
     }
 
