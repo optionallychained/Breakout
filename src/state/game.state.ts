@@ -46,6 +46,10 @@ export const GAME_STATE = new State({
                 ball.toggleAttached();
             }
         }
+        else if (!paused && game.input.isKeyDown(Keys.ESC)) {
+            game.setData('paused', true);
+            game.removeSystems('Physics', 'Collision');
+        }
 
         if (paused) {
             clickString = 'Click Paddle';
@@ -75,10 +79,6 @@ export const GAME_STATE = new State({
                 }
             }
         }
-        else if (game.input.isKeyDown(Keys.ESC)) {
-            game.setData('paused', true);
-            game.removeSystems('Physics', 'Collision');
-        }
 
         // info readouts
         if (clickString) {
@@ -98,6 +98,12 @@ export const GAME_STATE = new State({
         game.text.addString(
             `points: ${game.getData<number>('points')}`,
             new Vec2(-game.world.dimensions.x / 2 + 50, game.world.dimensions.y / 2 - 80),
+            new Vec2(20, 20),
+            Color.white()
+        );
+        game.text.addString(
+            'esc: pause',
+            new Vec2(game.world.dimensions.x / 2 - 11 * 20, game.world.dimensions.y / 2 - 50),
             new Vec2(20, 20),
             Color.white()
         );
