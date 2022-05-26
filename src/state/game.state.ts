@@ -26,6 +26,19 @@ export const GAME_STATE = new State({
         const brickCount = game.world.filterEntitiesByTags(...brickTags).length;
         let click = false;
 
+        // death condition
+        if (balls <= 0) {
+            game.switchToState('gameOver');
+            return;
+        }
+
+        // level end condition
+        if (brickCount <= 0) {
+            game.setData('level', game.getData<number>('level') + 1);
+            game.switchToState('gameSetup');
+            return;
+        }
+
         if (ball.isAttached()) {
             click = true;
 
@@ -68,16 +81,5 @@ export const GAME_STATE = new State({
             new Vec2(20, 20),
             Color.white()
         );
-
-        // death condition
-        if (balls <= 0) {
-            game.switchToState('gameOver');
-        }
-
-        // level end condition
-        if (brickCount <= 0) {
-            game.setData('level', game.getData<number>('level') + 1);
-            game.switchToState('gameSetup');
-        }
     }
 });

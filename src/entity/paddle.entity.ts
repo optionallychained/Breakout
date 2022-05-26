@@ -22,7 +22,6 @@ export class Paddle extends Entity {
         }
 
         const transform = this.getComponent<Transform>('Transform');
-
         const worldX = game.world.dimensions.x;
         const mouseX = game.input.mousePos.x;
         const dimX = transform.scale.x;

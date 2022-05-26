@@ -5,6 +5,7 @@ import { GoldBrick } from '../entity/bricks/goldbrick.entity';
 import { HardBrick } from '../entity/bricks/hardbrick.entity';
 import { InvincibleBrick } from '../entity/bricks/invinciblebrick.entity';
 import { SimpleBrick } from '../entity/bricks/simplebrick.entity';
+import { Cursor } from '../entity/cursor.entity';
 import { Paddle } from '../entity/paddle.entity';
 import { Wall } from '../entity/wall.entity';
 
@@ -57,6 +58,7 @@ export const GAME_SETUP_STATE = new State({
                 new Wall(new Vec2(-worldX + wallSize / 2, 0), new Vec2(wallSize, game.world.dimensions.y), true),
                 new Wall(new Vec2(worldX - wallSize / 2, 0), new Vec2(wallSize, game.world.dimensions.y), true),
                 new Wall(new Vec2(0, worldY - wallSize / 2), new Vec2(game.world.dimensions.x, wallSize), false),
+                new Cursor()
             );
         }
     },
