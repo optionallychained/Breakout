@@ -17,7 +17,7 @@ export class Coin extends Entity {
         });
     }
 
-    public tick(game: Game, frameDelta: number): void {
+    public tick(game: Game): void {
         const transform = this.getComponent<Transform>('Transform');
 
         if (transform.position.y <= -game.world.dimensions.y / 2 - transform.scale.y / 2) {
@@ -28,7 +28,7 @@ export class Coin extends Entity {
     public onCollisionStart(game: Game, other: Entity): void {
         if (other.tag === 'paddle') {
             game.world.removeEntity(this);
-            game.setData('points', game.getData<number>('points') + this.getComponent<Points>('Points').value * 10);
+            game.setData('points', game.getData<number>('points') + this.getComponent<Points>('Points').value);
         }
     }
 }

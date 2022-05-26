@@ -22,8 +22,8 @@ export const GAME_SETUP_STATE = new State({
     init: (game) => {
         // choose a level
         const level = game.getData<number>('level');
-        const cycle = game.getData<number>('levelcycle');
-        const cycleCap = game.getData<number>('levelcyclecap');
+        const cycle = game.getData<number>('levelCycle');
+        const cycleCap = game.getData<number>('levelCycleCap');
 
         const levelSet = levelPool[level - (cycle * cycleCap) - 1];
         const selectedLevel = levelSet[Math.floor(Math.random() * levelSet.length)];
@@ -87,11 +87,12 @@ export const GAME_SETUP_STATE = new State({
         // add ball
         game.world.addEntity(new Ball());
 
+        game.setData('multiplier', game.getData<number>('levelCycle') + 1);
+
         // if game is just starting, populate paddle and walls
         if (game.getData<number>('level') === 1) {
             game.setData('balls', 2);
             game.setData('points', 0);
-            game.setData('multiplier', 1);
 
             game.world.addEntities(
                 new Paddle(worldY, wallSize),

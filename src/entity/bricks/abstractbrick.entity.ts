@@ -78,7 +78,7 @@ export abstract class Brick extends Entity {
 
         const coin = Math.random() * 100 <= this.brickConfig.coinChance;
         if (coin) {
-            game.world.addEntity(new Coin(position, this.getComponent<Points>('Points').value));
+            game.world.addEntity(new Coin(position, this.getComponent<Points>('Points').value * 10 * game.getData<number>('level')));
         }
         else if (
             Math.random() * 100 <= this.brickConfig.powerChance

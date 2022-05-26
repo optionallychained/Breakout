@@ -16,8 +16,8 @@ game.setData('wallSize', 20);
 game.setData('brickPadding', 10);
 game.setData('brickMargin', 75);
 game.setData('level', 1);
-game.setData('levelcycle', 0);
-game.setData('levelcyclecap', 3);
+game.setData('levelCycle', 0);
+game.setData('levelCycleCap', 3);
 
 // TODO would be nice to have pause as a state, but may require a "to"/"from" in state end/init for conditional logic on gamestate
 game.setData('paused', false);

@@ -63,7 +63,8 @@ export class Ball extends Entity {
                     game.setData('balls', game.getData<number>('balls') - 1);
 
                     // reset points multiplier
-                    game.setData('multiplier', 1);
+                    // the current level cycle is taken as the base multiplier, rewarding increasing points as the game goes on
+                    game.setData('multiplier', game.getData<number>('levelCycle') + 1);
 
                     // delete any coins or power-related entities on the field
                     game.world.removeEntities(...game.world.filterEntitiesByTags('power', 'coin', 'bullet', 'ball-multi'));
@@ -90,7 +91,9 @@ export class Ball extends Entity {
         }
         else if (other.tag === 'paddle') {
             if (!this.multi) {
-                game.setData('multiplier', 1);
+                // reset points multiplier
+                // the current level cycle is taken as the base multiplier, rewarding increasing points as the game goes on
+                game.setData('multiplier', game.getData<number>('levelCycle') + 1);
             }
 
             const offset = Vec2.normalize(Vec2.sub(ball.position, ot.position));

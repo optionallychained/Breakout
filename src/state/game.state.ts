@@ -35,10 +35,10 @@ export const GAME_STATE = new State({
         // level end condition
         if (brickCount <= 0) {
             let level = game.getData<number>('level');
-            const cycleCap = game.getData<number>('levelcyclecap');
+            const cycleCap = game.getData<number>('levelCycleCap');
 
             if (level++ % cycleCap === 0) {
-                game.setData('levelcycle', game.getData<number>('levelcycle') + 1);
+                game.setData('levelCycle', game.getData<number>('levelCycle') + 1);
             }
 
             game.setData('level', level);

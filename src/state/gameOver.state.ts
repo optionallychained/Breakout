@@ -5,6 +5,7 @@ export const GAME_OVER_STATE = new State({
     name: 'gameOver',
     init: (game) => {
         game.setData('level', 1);
+        game.setData('levelCycle', 0);
     },
     end: (game) => {
         game.text.clearEntities();
