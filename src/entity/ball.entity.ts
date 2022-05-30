@@ -51,9 +51,6 @@ export class Ball extends Entity {
         }
         else {
             if (transform.position.y + transform.scale.y * 0.75 <= -game.world.dimensions.y / 2) {
-                // deactivate any active powers
-                PowerHandler.deactivatePower(game);
-
                 if (this.multi) {
                     game.world.removeEntity(this);
                 }
@@ -68,6 +65,9 @@ export class Ball extends Entity {
 
                     // delete any coins or power-related entities on the field
                     game.world.removeEntities(...game.world.filterEntitiesByTags('power', 'coin', 'bullet', 'ball-multi'));
+
+                    // deactivate any active powers
+                    PowerHandler.deactivatePower(game);
                 }
             }
         }
