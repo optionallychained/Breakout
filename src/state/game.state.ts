@@ -23,7 +23,8 @@ export const GAME_STATE = new State({
         const ball = game.world.filterEntitiesByTag('ball')[0] as Ball;
         const paused = game.getData<boolean>('paused');
         const balls = game.getData<number>('balls');
-        const brickCount = game.world.filterEntitiesByTags(...BRICK_TAGS).length;
+        // TODO multi-condition entity filtering would be nice
+        const brickCount = game.world.filterEntitiesByTags(...BRICK_TAGS.filter((t) => t !== 'invincibleBrick')).length;
         let clickString = '';
 
         // death condition
