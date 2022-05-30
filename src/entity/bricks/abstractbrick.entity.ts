@@ -58,7 +58,7 @@ export abstract class Brick extends Entity {
 
     public onCollisionStart(game: Game, other: Entity): void {
         if (!this.hasComponent('Invincible') && (other.tag.includes('ball') || other.tag === 'explosion' || other.tag === 'bullet')) {
-            if (!--this.getComponent<Health>('Health').value) {
+            if (!--this.getComponent<Health>('Health').value || other.hasComponent('Invincible')) {
                 // add points
                 // every brick hit in sequence (between paddle hits) yields more points
                 const multiplier = game.getData<number>('multiplier');

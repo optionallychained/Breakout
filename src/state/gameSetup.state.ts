@@ -8,6 +8,7 @@ import { SimpleBrick } from '../entity/bricks/simplebrick.entity';
 import { Cursor } from '../entity/cursor.entity';
 import { Paddle } from '../entity/paddle.entity';
 import { Wall } from '../entity/wall.entity';
+import { BONUS_LEVELS } from '../levels/bonus';
 import { levelPool } from '../levels/level';
 
 const bricks: Array<Brick> = [];
@@ -21,11 +22,19 @@ export const GAME_SETUP_STATE = new State({
     name: 'gameSetup',
     init: (game) => {
         // choose a level
-        const level = game.getData<number>('level');
-        const cycle = game.getData<number>('levelCycle');
-        const cycleCap = game.getData<number>('levelCycleCap');
+        let levelSet;
 
-        const levelSet = levelPool[level - (cycle * cycleCap) - 1];
+        if (game.getData<boolean>('bonus')) {
+            levelSet = BONUS_LEVELS;
+        }
+        else {
+            const level = game.getData<number>('level');
+            const cycle = game.getData<number>('levelCycle');
+            const cycleCap = game.getData<number>('levelCycleCap');
+
+            levelSet = levelPool[level - (cycle * cycleCap) - 1];
+        }
+
         const selectedLevel = levelSet[Math.floor(Math.random() * levelSet.length)];
 
         // unpack some data
@@ -113,7 +122,18 @@ export const GAME_SETUP_STATE = new State({
     tick: (game, frameDelta) => {
         game.text.clearEntities();
 
-        const str = `level ${game.getData<number>('level')}`;
+        let str;
+        if (game.getData<boolean>('bonus')) {
+            str = 'bonus';
+        }
+        else {
+            const level = game.getData<number>('level');
+            const cycle = game.getData<number>('levelCycle');
+            const cap = game.getData<number>('levelCycleCap');
+
+            str = `${cycle + 1} - ${level - (cycle * cap)}`;
+        }
+
         game.text.addString(
             str,
             new Vec2(-(str.length - 1) / 2 * 50, -game.world.dimensions.y / 4 + 60),

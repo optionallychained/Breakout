@@ -37,8 +37,20 @@ export const GAME_STATE = new State({
             let level = game.getData<number>('level');
             const cycleCap = game.getData<number>('levelCycleCap');
 
-            if (level++ % cycleCap === 0) {
-                game.setData('levelCycle', game.getData<number>('levelCycle') + 1);
+            // bonus level between each level cycle
+            if (level % cycleCap === 0) {
+                if (game.getData<boolean>('bonus')) {
+                    level++;
+
+                    game.setData('bonus', false);
+                    game.setData('levelCycle', game.getData<number>('levelCycle') + 1);
+                }
+                else {
+                    game.setData('bonus', true);
+                }
+            }
+            else {
+                level++;
             }
 
             game.setData('level', level);
