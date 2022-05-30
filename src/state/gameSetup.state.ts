@@ -9,7 +9,7 @@ import { Cursor } from '../entity/cursor.entity';
 import { Paddle } from '../entity/paddle.entity';
 import { Wall } from '../entity/wall.entity';
 import { BONUS_LEVELS } from '../levels/bonus';
-import { levelPool } from '../levels/level';
+import { LEVEL_POOL } from '../levels/level';
 
 const bricks: Array<Brick> = [];
 
@@ -32,7 +32,7 @@ export const GAME_SETUP_STATE = new State({
             const cycle = game.getData<number>('levelCycle');
             const cycleCap = game.getData<number>('levelCycleCap');
 
-            levelSet = levelPool[level - (cycle * cycleCap) - 1];
+            levelSet = LEVEL_POOL[level - (cycle * cycleCap) - 1];
         }
 
         const selectedLevel = levelSet[Math.floor(Math.random() * levelSet.length)];

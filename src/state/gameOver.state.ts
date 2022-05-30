@@ -1,5 +1,5 @@
 import { Color, State, Vec2 } from 'aura-2d';
-import { brickTags } from '../entity/bricks/brickInfo';
+import { BRICK_TAGS } from '../entity/bricks/brickInfo';
 
 let time = 0;
 let interval = 0;
@@ -11,7 +11,7 @@ export const GAME_OVER_STATE = new State({
         game.setData('level', 1);
         game.setData('levelCycle', 0);
 
-        interval = destroyTime / (game.world.filterEntitiesByTags(...brickTags).length + 1);
+        interval = destroyTime / (game.world.filterEntitiesByTags(...BRICK_TAGS).length + 1);
     },
     end: (game) => {
         game.text.clearEntities();
@@ -21,7 +21,7 @@ export const GAME_OVER_STATE = new State({
     },
     tick: (game, frameDelta) => {
         game.text.clearEntities();
-        const bricks = game.world.filterEntitiesByTags(...brickTags);
+        const bricks = game.world.filterEntitiesByTags(...BRICK_TAGS);
 
         if (bricks.length) {
             time += frameDelta;

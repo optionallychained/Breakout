@@ -1,7 +1,7 @@
 import { Reverse } from '../../component/reverse.component';
 import { Power } from '../power';
 
-export const reversePaddle: Power = {
+export const REVERSE_PADDLE: Power = {
     name: 'Reverse Paddle',
     timeout: 5000,
     chance: 20,

@@ -1,7 +1,7 @@
 import { LaserFire } from '../../system/laserFire.system';
 import { Power } from '../power';
 
-export const laser: Power = {
+export const LASER: Power = {
     name: 'Laser',
     timeout: 3000,
     chance: 10,

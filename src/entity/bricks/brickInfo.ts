@@ -1,4 +1,4 @@
-export const brickTags = [
+export const BRICK_TAGS = [
     'goldbrick',
     'hardbrick',
     'invinciblebrick',

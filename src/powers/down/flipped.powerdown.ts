@@ -3,7 +3,7 @@ import { Reverse } from '../../component/reverse.component';
 import { Power } from '../power';
 
 // TODO might be nice to animate this?
-export const flipped: Power = {
+export const FLIPPED: Power = {
     name: 'Flipped!',
     timeout: 5000,
     chance: 10,

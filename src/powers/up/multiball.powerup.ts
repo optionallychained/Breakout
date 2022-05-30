@@ -1,7 +1,7 @@
 import { Ball } from '../../entity/ball.entity';
 import { Power } from '../power';
 
-export const multiBall: Power = {
+export const MULTI_BALL: Power = {
     name: 'Multiball',
     timeout: 1500,
     chance: 15,

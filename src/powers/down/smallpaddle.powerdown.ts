@@ -1,7 +1,7 @@
 import { Transform, Vec2 } from 'aura-2d';
 import { Power } from '../power';
 
-export const smallPaddle: Power = {
+export const SMALL_PADDLE: Power = {
     name: 'Small Paddle',
     timeout: 10000,
     chance: 40,

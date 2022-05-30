@@ -11,7 +11,7 @@ export type Level = Array<Array<BrickShortTag | ' '>>;
 //     level 1, 4, 7 select from set 1
 //     level 2, 5, 8 select from set 2
 //     level 3, 6, 9 select from set 3
-export const levelPool = [
+export const LEVEL_POOL = [
     [...LEVEL_ONES],
     [...LEVEL_TWOS],
     [...LEVEL_THREES]

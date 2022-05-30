@@ -1,6 +1,6 @@
 import { Collision, Color, Keys, Physics, State, Transform, Vec2 } from 'aura-2d';
 import { Ball } from '../entity/ball.entity';
-import { brickTags } from '../entity/bricks/brickInfo';
+import { BRICK_TAGS } from '../entity/bricks/brickInfo';
 import { PowerHandler } from '../system/powerHandler.system';
 
 export const GAME_STATE = new State({
@@ -23,7 +23,7 @@ export const GAME_STATE = new State({
         const ball = game.world.filterEntitiesByTag('ball')[0] as Ball;
         const paused = game.getData<boolean>('paused');
         const balls = game.getData<number>('balls');
-        const brickCount = game.world.filterEntitiesByTags(...brickTags).length;
+        const brickCount = game.world.filterEntitiesByTags(...BRICK_TAGS).length;
         let clickString = '';
 
         // death condition

@@ -1,6 +1,6 @@
 import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
 import { PowerHandler } from '../system/powerHandler.system';
-import { brickTags } from './bricks/brickInfo';
+import { BRICK_TAGS } from './bricks/brickInfo';
 import { Explosion } from './explosion.entity';
 
 export class Ball extends Entity {
@@ -113,7 +113,7 @@ export class Ball extends Entity {
             // increase speed a little
             velChange = 10;
         }
-        else if (brickTags.includes(other.tag)) {
+        else if (BRICK_TAGS.includes(other.tag)) {
             // cancel velocity changes + power/coin spawns for second+ of multiple collisions on a single frame or if ball is invincible
             if (this.didCollide || this.hasComponent('Invincible')) {
                 return;

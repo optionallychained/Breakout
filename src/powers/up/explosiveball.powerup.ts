@@ -1,7 +1,7 @@
 import { Explosive } from '../../component/explosive.component';
 import { Power } from '../power';
 
-export const explosiveBall: Power = {
+export const EXPLOSIVE_BALL: Power = {
     name: 'Explosive Ball',
     timeout: 5000,
     chance: 20,

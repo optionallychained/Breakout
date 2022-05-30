@@ -1,6 +1,6 @@
 import { Power } from '../power';
 
-export const extraBall: Power = {
+export const EXTRA_BALL: Power = {
     name: 'Extra Ball',
     timeout: 1500,
     chance: 20,

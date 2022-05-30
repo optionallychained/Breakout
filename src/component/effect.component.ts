@@ -1,5 +1,5 @@
 import { Component } from 'aura-2d';
-import { Power, powerdowns, powerups } from '../powers/power';
+import { Power, POWER_DOWNS, POWER_UPS } from '../powers/power';
 
 export class Effect extends Component {
 
@@ -9,7 +9,7 @@ export class Effect extends Component {
         super('Effect');
 
         // majority chance for powerup; otherwise powerdown
-        const powerlist = Math.random() <= 0.7 ? powerups : powerdowns;
+        const powerlist = Math.random() <= 0.7 ? POWER_UPS : POWER_DOWNS;
         const r = Math.random() * 100;
         let count = 0;
 

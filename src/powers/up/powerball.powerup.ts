@@ -1,7 +1,7 @@
 import { Invincible } from '../../component/invincible.component';
 import { Power } from '../power';
 
-export const powerBall: Power = {
+export const POWER_BALL: Power = {
     name: 'Power Ball',
     timeout: 5000,
     chance: 10,

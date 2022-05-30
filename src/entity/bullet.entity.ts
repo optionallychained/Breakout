@@ -1,5 +1,5 @@
 import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
-import { brickTags } from './bricks/brickInfo';
+import { BRICK_TAGS } from './bricks/brickInfo';
 
 export class Bullet extends Entity {
 
@@ -17,7 +17,7 @@ export class Bullet extends Entity {
     }
 
     public onCollisionStart(game: Game, other: Entity): void {
-        if (brickTags.includes(other.tag)) {
+        if (BRICK_TAGS.includes(other.tag)) {
             game.world.removeEntity(this);
         }
     }
