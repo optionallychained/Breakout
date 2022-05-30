@@ -10,11 +10,16 @@ export const invincibleBricks: Power = {
     activate: (game) => {
         // TODO horribly inefficient
         // maybe just set a global flag instead?
-        game.world.filterEntitiesByTags(...brickTags).forEach((b) => b.addComponent(new Invincible()));
+        game.world.filterEntitiesByTags(...brickTags)
+            // TODO multi-condition entity filtering would be nice
+            .filter((b) => b.tag !== 'invincibleBrick')
+            .forEach((b) => b.addComponent(new Invincible()));
     },
     deactivate: (game) => {
         // TODO horribly inefficient
         // maybe just set a global flag instead?
-        game.world.filterEntitiesByTags(...brickTags).forEach((b) => b.removeComponent('Invincible'));
+        game.world.filterEntitiesByTags(...brickTags)
+            .filter((b) => b.tag !== 'invincibleBrick')
+            .forEach((b) => b.removeComponent('Invincible'));
     }
 };
