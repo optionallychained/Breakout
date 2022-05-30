@@ -6,10 +6,10 @@ export class HardBrick extends Brick {
     constructor(position: Vec2, scale: Vec2) {
         // greatly increased power chance, slightly reduced coin chance
         super('hardbrick', position, scale, Color.red(), {
-            points: 2,
+            points: 5,
             health: 2,
             coinChance: 5,
-            powerChance: 15,
+            powerChance: 20,
             geometry: Geometries.Wireframe.SQUARE
         });
     }

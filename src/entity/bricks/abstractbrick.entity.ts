@@ -14,10 +14,10 @@ interface BrickConfig {
 }
 
 const brickConfigDefaults: Required<BrickConfig> = {
-    points: 1,
+    points: 2,
     health: 1,
-    coinChance: 7.5,
-    powerChance: 7.5,
+    coinChance: 10,
+    powerChance: 10,
     geometry: Geometries.SQUARE
 }
 

@@ -6,7 +6,7 @@ export class GoldBrick extends Brick {
     constructor(position: Vec2, scale: Vec2) {
         // always spawn a coin
         super('goldbrick', position, scale, Color.yellow(), {
-            points: 10,
+            points: 15,
             health: 3,
             coinChance: 100,
             powerChance: 0,
