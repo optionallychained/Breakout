@@ -1,4 +1,5 @@
 import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
+import { Sounds } from '../sounds';
 import { PowerHandler } from '../system/powerHandler.system';
 import { BRICK_TAGS } from './bricks/brickInfo';
 import { Explosion } from './explosion.entity';
@@ -68,6 +69,8 @@ export class Ball extends Entity {
 
                     // deactivate any active powers
                     PowerHandler.deactivatePower(game);
+
+                    Sounds.play('death');
                 }
             }
         }
@@ -84,12 +87,18 @@ export class Ball extends Entity {
         let velMultX = 1, velMultY = 1, velChange = 0;
 
         if (other.tag === 'wall-vert') {
+            Sounds.play('paddlewall');
+
             velMultX = -1;
         }
         else if (other.tag === 'wall-hor') {
+            Sounds.play('paddlewall');
+
             velMultY = -1;
         }
         else if (other.tag === 'paddle') {
+            Sounds.play('paddlewall');
+
             if (!this.multi) {
                 // reset points multiplier
                 // the current level cycle is taken as the base multiplier, rewarding increasing points as the game goes on
@@ -151,6 +160,10 @@ export class Ball extends Entity {
     }
 
     public toggleAttached(): void {
+        if (this.attached) {
+            Sounds.play('paddlewall');
+        }
+
         this.attached = !this.attached;
 
         const transform = this.getComponent<Transform>('Transform');

@@ -1,5 +1,6 @@
 import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
 import { Effect } from '../component/effect.component';
+import { Sounds } from '../sounds';
 import { PowerHandler } from '../system/powerHandler.system';
 
 export class Power extends Entity {
@@ -30,7 +31,15 @@ export class Power extends Entity {
         if (other.tag === 'paddle') {
             game.world.removeEntity(this);
 
-            PowerHandler.activatePower(this.getComponent<Effect>('Effect').power, game);
+            const { isUp, power } = this.getComponent<Effect>('Effect');
+            PowerHandler.activatePower(power, game);
+
+            if (isUp) {
+                Sounds.play('powerup');
+            }
+            else {
+                Sounds.play('powerdown');
+            }
         }
     }
 }

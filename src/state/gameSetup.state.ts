@@ -10,6 +10,7 @@ import { Paddle } from '../entity/paddle.entity';
 import { Wall } from '../entity/wall.entity';
 import { BONUS_LEVELS } from '../levels/bonus';
 import { LEVEL_POOL } from '../levels/level';
+import { Sounds } from '../sounds';
 
 const bricks: Array<Brick> = [];
 const brickColors = [
@@ -127,6 +128,8 @@ export const GAME_SETUP_STATE = new State({
                 new Cursor()
             );
         }
+
+        Sounds.play('levelsetup');
     },
     end: (game) => {
         game.text.clearEntities();

@@ -4,12 +4,15 @@ import { Power, POWER_DOWNS, POWER_UPS } from '../powers/power';
 export class Effect extends Component {
 
     public readonly power: Power;
+    public readonly isUp: boolean;
 
     constructor() {
         super('Effect');
 
         // majority chance for powerup; otherwise powerdown
-        const powerlist = Math.random() <= 0.7 ? POWER_UPS : POWER_DOWNS;
+        this.isUp = Math.random() <= 0.7;
+
+        const powerlist = this.isUp ? POWER_UPS : POWER_DOWNS
         const r = Math.random() * 100;
         let count = 0;
 

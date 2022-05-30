@@ -17,6 +17,6 @@ https://optionallychained.github.io/Breakout
 - [x] brick variants
 - [x] level progression (increasing brick variety; defined layouts?)
 - [ ] bonus levels
-- [ ] sounds
+- [x] sounds
 - [ ] try to make state flow less messy/interdependent
 - [ ] identify Aura improvements required to clean up implementation/separate concerns better/encapsulate functionality better

@@ -1,6 +1,7 @@
 import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Geometry, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
 import { Health } from '../../component/health.component';
 import { Points } from '../../component/points.component';
+import { Sounds } from '../../sounds';
 import { PowerHandler } from '../../system/powerHandler.system';
 import { Coin } from '../coin.entity';
 import { Power } from '../power.entity';
@@ -59,7 +60,11 @@ export abstract class Brick extends Entity {
     }
 
     public onCollisionStart(game: Game, other: Entity): void {
+        let sound = '';
+
         if (!this.hasComponent('Invincible') && (other.tag.includes('ball') || other.tag === 'explosion' || other.tag === 'bullet')) {
+            sound = 'brickhit';
+
             if (!--this.getComponent<Health>('Health').value || other.hasComponent('Invincible')) {
                 // add points
                 // every brick hit in sequence (between paddle hits) yields more points
@@ -70,8 +75,15 @@ export abstract class Brick extends Entity {
                 this.spawnContents(game);
 
                 game.world.removeEntity(this);
+
+                sound = 'brickdestroy';
             }
         }
+        else {
+            sound = 'paddlewall';
+        }
+
+        Sounds.play(sound);
     }
 
     protected spawnContents(game: Game): void {
@@ -81,6 +93,7 @@ export abstract class Brick extends Entity {
         const coin = Math.random() * 100 <= this.brickConfig.coinChance;
         if (coin) {
             game.world.addEntity(new Coin(position, this.getComponent<Points>('Points').value * 10 * game.getData<number>('level')));
+            Sounds.play('coinpowerspawn');
         }
         else if (
             Math.random() * 100 <= this.brickConfig.powerChance
@@ -91,6 +104,7 @@ export abstract class Brick extends Entity {
         ) {
 
             game.world.addEntity(new Power(position));
+            Sounds.play('coinpowerspawn');
         }
     }
 }
