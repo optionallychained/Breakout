@@ -114,8 +114,8 @@ export class Ball extends Entity {
             velChange = 10;
         }
         else if (BRICK_TAGS.includes(other.tag)) {
-            // cancel velocity changes + power/coin spawns for second+ of multiple collisions on a single frame or if ball is invincible
-            if (this.didCollide || this.hasComponent('Invincible')) {
+            // cancel velocity changes for second+ of multiple same-frame collisions, or if ball is invincible and brick is not
+            if (this.didCollide || (this.hasComponent('Invincible') && !other.hasComponent('Invincible'))) {
                 return;
             }
             this.didCollide = true;
