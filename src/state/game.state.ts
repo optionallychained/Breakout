@@ -11,7 +11,9 @@ export const GAME_STATE = new State({
     end: (game) => {
         game.text.clearEntities();
 
-        game.world.removeEntities(...game.world.filterEntitiesByTags('ball', 'ball-multi', 'coin', 'power', 'explosion', 'bullet'));
+        game.world.removeEntities(
+            ...game.world.filterEntitiesByTags('ball', 'ball-multi', 'coin', 'power', 'explosion', 'bullet', 'invinciblebrick')
+        );
 
         PowerHandler.deactivatePower(game);
 
@@ -24,7 +26,7 @@ export const GAME_STATE = new State({
         const paused = game.getData<boolean>('paused');
         const balls = game.getData<number>('balls');
         // TODO multi-condition entity filtering would be nice
-        const brickCount = game.world.filterEntitiesByTags(...BRICK_TAGS.filter((t) => t !== 'invincibleBrick')).length;
+        const brickCount = game.world.filterEntitiesByTags(...BRICK_TAGS.filter((t) => t !== 'invinciblebrick')).length;
         let clickString = '';
 
         // death condition

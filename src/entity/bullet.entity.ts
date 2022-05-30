@@ -10,7 +10,7 @@ export class Bullet extends Entity {
                 new Transform(position, new Vec2(10, 40), 0, new Vec2(0, 500)),
                 new Shader(ShaderPrograms.BASIC),
                 new Model(Geometries.SQUARE),
-                new FlatColor(Color.rgba(50, 255, 75)),
+                new FlatColor(Color.white()),
                 new BoxCollider()
             ]
         });

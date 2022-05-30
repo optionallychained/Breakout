@@ -1,10 +1,16 @@
-import { Color, Vec2 } from 'aura-2d';
+import { Color, Geometries, Vec2 } from 'aura-2d';
 import { Brick } from './abstractbrick.entity';
 
 export class HardBrick extends Brick {
 
-    constructor(position: Vec2, scale: Vec2, color: Color) {
+    constructor(position: Vec2, scale: Vec2) {
         // greatly increased power chance, slightly reduced coin chance
-        super('hardbrick', position, scale, color, { points: 2, health: 2, coinChance: 5, powerChance: 15 });
+        super('hardbrick', position, scale, Color.red(), {
+            points: 2,
+            health: 2,
+            coinChance: 5,
+            powerChance: 15,
+            geometry: Geometries.Wireframe.SQUARE
+        });
     }
 }

@@ -12,6 +12,16 @@ import { BONUS_LEVELS } from '../levels/bonus';
 import { LEVEL_POOL } from '../levels/level';
 
 const bricks: Array<Brick> = [];
+const brickColors = [
+    Color.blue(),
+    Color.cyan(),
+    Color.green(),
+    Color.magenta(),
+    Color.red(),
+    Color.yellow(),
+    Color.hex('CA00F2'), // purple
+    Color.hex('FF5F00'), // orange
+];
 
 // placement timer info; level setup time is made to be consistent across levels of differing sizes
 let time = 0;
@@ -54,10 +64,15 @@ export const GAME_SETUP_STATE = new State({
         const brickLimitRight = worldX - wallSize - brickMargin - brickScale.x / 2;
         const brickLimitTop = worldY - wallSize - brickMargin - brickScale.y / 2;
 
+        // choose three colors to alternate for the level's rows
+        const [colorOne, colorTwo, colorThree] = [...brickColors].sort(() => 0.5 - Math.random()).slice(0, 3);
+
         // make bricks
         let y = brickLimitTop;
+        let rowNumber = 0;
         for (const row of selectedLevel) {
-            const rowColor = Color.random();
+            // cycle the chosen three colors
+            const rowColor = rowNumber % 3 === 0 ? colorThree : (rowNumber % 2 === 0 ? colorTwo : colorOne);
             const rowBricks = [];
             let x = brickLimitRight;
 
@@ -70,7 +85,7 @@ export const GAME_SETUP_STATE = new State({
                         break;
 
                     case 'h':
-                        rowBricks.push(new HardBrick(position, brickScale, rowColor));
+                        rowBricks.push(new HardBrick(position, brickScale));
                         break;
 
                     case 'i':
@@ -88,6 +103,7 @@ export const GAME_SETUP_STATE = new State({
             bricks.push(...rowBricks);
 
             y -= brickScale.y + brickPadding;
+            rowNumber++;
         }
 
         // calculate placement interval
@@ -105,8 +121,8 @@ export const GAME_SETUP_STATE = new State({
 
             game.world.addEntities(
                 new Paddle(worldY, wallSize),
-                new Wall(new Vec2(-worldX + wallSize / 2, 0), new Vec2(wallSize, game.world.dimensions.y), true),
-                new Wall(new Vec2(worldX - wallSize / 2, 0), new Vec2(wallSize, game.world.dimensions.y), true),
+                new Wall(new Vec2(-worldX + wallSize / 2, -wallSize / 2), new Vec2(wallSize, game.world.dimensions.y - wallSize), true),
+                new Wall(new Vec2(worldX - wallSize / 2, -wallSize / 2), new Vec2(wallSize, game.world.dimensions.y - wallSize), true),
                 new Wall(new Vec2(0, worldY - wallSize / 2), new Vec2(game.world.dimensions.x, wallSize), false),
                 new Cursor()
             );

@@ -9,7 +9,7 @@ export class Paddle extends Entity {
                 new Transform(new Vec2(0, wallSize * 2 - worldY), new Vec2(110, 25)),
                 new Model(Geometries.SQUARE),
                 new Shader(ShaderPrograms.BASIC),
-                new FlatColor(Color.rgba(50, 255, 75)),
+                new FlatColor(Color.white()),
                 new BoxCollider()
             ]
         });

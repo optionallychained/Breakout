@@ -7,9 +7,9 @@ export class Wall extends Entity {
             tag: `wall-${vert ? 'vert' : 'hor'}`,
             components: [
                 new Transform(position, scale),
-                new Model(Geometries.SQUARE),
+                new Model(Geometries.Wireframe.SQUARE),
                 new Shader(ShaderPrograms.BASIC),
-                new FlatColor(Color.rgba(50, 255, 75)),
+                new FlatColor(Color.white()),
                 new BoxCollider()
             ]
         });

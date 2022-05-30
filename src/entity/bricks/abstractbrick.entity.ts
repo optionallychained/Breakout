@@ -1,4 +1,4 @@
-import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
+import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Geometry, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
 import { Health } from '../../component/health.component';
 import { Points } from '../../component/points.component';
 import { PowerHandler } from '../../system/powerHandler.system';
@@ -9,14 +9,16 @@ interface BrickConfig {
     points?: number,
     health?: number,
     coinChance?: number,
-    powerChance?: number
+    powerChance?: number;
+    geometry?: Geometry;
 }
 
 const brickConfigDefaults: Required<BrickConfig> = {
     points: 1,
     health: 1,
     coinChance: 7.5,
-    powerChance: 7.5
+    powerChance: 7.5,
+    geometry: Geometries.SQUARE
 }
 
 export abstract class Brick extends Entity {
@@ -29,7 +31,7 @@ export abstract class Brick extends Entity {
             tag,
             components: [
                 new Transform(position, scale),
-                new Model(Geometries.SQUARE),
+                new Model(brickConfig?.geometry ?? brickConfigDefaults.geometry),
                 new Shader(ShaderPrograms.BASIC),
                 new FlatColor(color),
                 new BoxCollider(),

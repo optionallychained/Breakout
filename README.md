@@ -15,7 +15,7 @@ https://optionallychained.github.io/Breakout
 - [x] more complex points system
 - [x] power ups/downs
 - [x] brick variants
-- [ ] level progression (increasing brick variety; defined layouts?)
+- [x] level progression (increasing brick variety; defined layouts?)
 - [ ] bonus levels
 - [ ] sounds
 - [ ] try to make state flow less messy/interdependent
