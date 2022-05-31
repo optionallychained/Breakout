@@ -47,7 +47,7 @@ export class Ball extends Entity {
             }
 
             if (this.multi) {
-                this.toggleAttached();
+                this.detach();
             }
         }
         else {
@@ -57,7 +57,7 @@ export class Ball extends Entity {
                 }
                 else {
                     // death
-                    this.toggleAttached();
+                    this.attach();
                     game.setData('balls', game.getData<number>('balls') - 1);
 
                     // reset points multiplier
@@ -159,27 +159,17 @@ export class Ball extends Entity {
         return this.attached;
     }
 
-    public toggleAttached(): void {
-        if (this.attached) {
-            Sounds.play('paddlewall');
-        }
+    public attach(): void {
+        this.attached = true;
+        this.getComponent<Transform>('Transform').velocity.set();
+    }
 
-        this.attached = !this.attached;
-
-        const transform = this.getComponent<Transform>('Transform');
-        if (this.attached) {
-            transform.velocity.set();
-        }
-        else {
-            if (this.multi) {
-                // set direction on x
-                transform.velocity.set(this.defaultVelocity.x * this.dir, this.defaultVelocity.y);
-            }
-            else {
-                // random start direction on x
-                transform.velocity.set(this.defaultVelocity.x * (Math.random() <= 0.5 ? -1 : 1), this.defaultVelocity.y);
-            }
-        }
+    public detach(): void {
+        this.attached = false;
+        this.getComponent<Transform>('Transform').velocity.set(
+            this.multi ? this.defaultVelocity.x * this.dir : this.defaultVelocity.x * (Math.random() <= 0.5 ? 1 : -1),
+            this.defaultVelocity.y
+        );
     }
 
     private changeVelocity(delta: number): void {

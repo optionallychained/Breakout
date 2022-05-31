@@ -9,6 +9,7 @@ export const GAME_STATE = new State({
     },
     end: (game) => {
         game.text.clearEntities();
+        game.removeSystems('Physics', 'Collision');
     },
     tick: (game) => {
         game.text.clearEntities();
@@ -63,7 +64,7 @@ export const GAME_STATE = new State({
             );
 
             if (game.input.isMouseDown()) {
-                ball.toggleAttached();
+                ball.detach();
             }
         }
 

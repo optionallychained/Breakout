@@ -5,9 +5,6 @@ import { GoldBrick } from '../entity/bricks/goldbrick.entity';
 import { HardBrick } from '../entity/bricks/hardbrick.entity';
 import { InvincibleBrick } from '../entity/bricks/invinciblebrick.entity';
 import { SimpleBrick } from '../entity/bricks/simplebrick.entity';
-import { Cursor } from '../entity/cursor.entity';
-import { Paddle } from '../entity/paddle.entity';
-import { Wall } from '../entity/wall.entity';
 import { BONUS_LEVELS } from '../levels/bonus';
 import { LEVEL_POOL } from '../levels/level';
 import { Sounds } from '../sounds';
@@ -34,8 +31,10 @@ export const GAME_SETUP_STATE = new State({
     name: 'gameSetup',
     init: (game) => {
         game.world.removeEntities(
-            ...game.world.filterEntitiesByTags('ball', 'ball-multi', 'coin', 'power', 'explosion', 'bullet', 'invinciblebrick')
+            ...game.world.filterEntitiesByTags('ball-multi', 'coin', 'power', 'explosion', 'bullet', 'invinciblebrick')
         );
+
+        (game.world.filterEntitiesByTag('ball')[0] as Ball)?.attach();
 
         PowerHandler.deactivatePower(game);
 
@@ -117,33 +116,18 @@ export const GAME_SETUP_STATE = new State({
         // calculate placement interval
         interval = populateTime / (bricks.length + 1);
 
-        // add ball
-        game.world.addEntity(new Ball());
-
         game.setData('multiplier', game.getData<number>('levelCycle') + 1);
-
-        // if game is just starting, populate paddle and walls
-        if (game.getData<number>('level') === 1) {
-            game.setData('balls', 2);
-            game.setData('points', 0);
-
-            game.world.addEntities(
-                new Paddle(worldY, wallSize),
-                new Wall(new Vec2(-worldX + wallSize / 2, -wallSize / 2), new Vec2(wallSize, game.world.dimensions.y - wallSize), true),
-                new Wall(new Vec2(worldX - wallSize / 2, -wallSize / 2), new Vec2(wallSize, game.world.dimensions.y - wallSize), true),
-                new Wall(new Vec2(0, worldY - wallSize / 2), new Vec2(game.world.dimensions.x, wallSize), false),
-                new Cursor()
-            );
-        }
 
         Sounds.play('levelsetup');
     },
     end: (game) => {
         game.text.clearEntities();
-
-        // reset placement timer info
         time = 0;
         interval = 0;
+
+        if (game.getData<number>('level') > 1) {
+            (game.world.filterEntitiesByTag('ball')[0] as Ball).detach();
+        }
     },
     tick: (game, frameDelta) => {
         game.text.clearEntities();
@@ -178,10 +162,6 @@ export const GAME_SETUP_STATE = new State({
                 game.world.addEntity(b);
             }
             else {
-                if (game.getData<number>('level') > 1) {
-                    (game.world.filterEntitiesByTag('ball')[0] as Ball).toggleAttached();
-                }
-
                 game.switchToState('game');
             }
         }
