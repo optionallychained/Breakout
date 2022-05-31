@@ -12,7 +12,7 @@ const laser = POWER_UPS.find((p) => p.name === 'Laser');
 export const BONUS_LEVEL_STATE = new State({
     name: 'bonusLevel',
     init: (game) => {
-        game.addSystems(new Physics(), new Collision());
+        game.addSystems(Physics, Collision);
 
         game.world.addEntities(
             new ProgressBar(new Vec2(0, -game.world.dimensions.y / 4 - 20), game.world.dimensions.x / 2),

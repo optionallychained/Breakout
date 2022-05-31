@@ -7,7 +7,7 @@ export const LASER: Power = {
     chance: 10,
     up: true,
     activate: (game) => {
-        game.addSystem(new LaserFire());
+        game.addSystem(LaserFire);
     },
     deactivate: (game) => {
         game.removeSystem('LaserFire');

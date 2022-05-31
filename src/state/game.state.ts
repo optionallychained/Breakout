@@ -5,7 +5,7 @@ import { BRICK_TAGS } from '../entity/bricks/brickInfo';
 export const GAME_STATE = new State({
     name: 'game',
     init: (game) => {
-        game.addSystems(new Physics(), new Collision());
+        game.addSystems(Physics, Collision);
     },
     end: (game) => {
         game.text.clearEntities();
