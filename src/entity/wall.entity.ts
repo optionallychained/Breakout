@@ -2,9 +2,9 @@ import { BoxCollider, Color, Entity, FlatColor, Geometries, Model, Shader, Shade
 
 export class Wall extends Entity {
 
-    constructor(position: Vec2, scale: Vec2, vert: boolean) {
+    constructor(position: Vec2, scale: Vec2, vert: boolean, temp = false) {
         super({
-            tag: `wall-${vert ? 'vert' : 'hor'}`,
+            tag: `wall-${temp ? 'temp' : vert ? 'vert' : 'hor'}`,
             components: [
                 new Transform(position, scale),
                 new Model(Geometries.Wireframe.SQUARE),

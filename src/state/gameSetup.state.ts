@@ -1,6 +1,7 @@
 import { Color, State, Vec2 } from 'aura-2d';
 import { Ball } from '../entity/ball.entity';
 import { Brick } from '../entity/bricks/abstractbrick.entity';
+import { BRICK_TAGS } from '../entity/bricks/brickInfo';
 import { GoldBrick } from '../entity/bricks/goldbrick.entity';
 import { HardBrick } from '../entity/bricks/hardbrick.entity';
 import { InvincibleBrick } from '../entity/bricks/invinciblebrick.entity';
@@ -31,7 +32,7 @@ export const GAME_SETUP_STATE = new State({
     name: 'gameSetup',
     init: (game) => {
         game.world.removeEntities(
-            ...game.world.filterEntitiesByTags('ball-multi', 'coin', 'power', 'explosion', 'bullet', 'invinciblebrick')
+            ...game.world.filterEntitiesByTags('ball-multi', 'coin', 'power', 'explosion', 'bullet', 'progressbar', ...BRICK_TAGS)
         );
 
         (game.world.filterEntitiesByTag('ball')[0] as Ball)?.attach();
@@ -162,7 +163,12 @@ export const GAME_SETUP_STATE = new State({
                 game.world.addEntity(b);
             }
             else {
-                game.switchToState('game');
+                if (game.getData<boolean>('bonus')) {
+                    game.switchToState('bonusLevel');
+                }
+                else {
+                    game.switchToState('game');
+                }
             }
         }
     }

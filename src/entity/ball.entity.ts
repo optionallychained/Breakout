@@ -91,7 +91,7 @@ export class Ball extends Entity {
 
             velMultX = -1;
         }
-        else if (other.tag === 'wall-hor') {
+        else if (other.tag === 'wall-hor' || other.tag === 'wall-temp') {
             Sounds.play('paddlewall');
 
             velMultY = -1;

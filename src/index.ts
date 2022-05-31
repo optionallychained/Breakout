@@ -9,6 +9,7 @@ import { Paddle } from './entity/paddle.entity';
 import { Wall } from './entity/wall.entity';
 import { Cursor } from './entity/cursor.entity';
 import { Ball } from './entity/ball.entity';
+import { BONUS_LEVEL_STATE } from './state/bonusLevel.state';
 
 const game = new Game({
     canvasDimensions: new Vec2(1024, 768),
@@ -33,7 +34,7 @@ Sounds.add('shoot', 'res/shoot.wav');
 Sounds.add('levelsetup', 'res/levelsetup.wav');
 
 // TODO port into game config
-game.addStates(GAME_SETUP_STATE, GAME_STATE, PAUSED_STATE, GAME_OVER_STATE);
+game.addStates(GAME_SETUP_STATE, GAME_STATE, BONUS_LEVEL_STATE, PAUSED_STATE, GAME_OVER_STATE);
 
 // set up some persistent game objects and systems and set some initial data
 // TODO implies want for a configurable game init() &&/|| configurable initial data?
