@@ -58,10 +58,6 @@ const game = new Game({
         game.setData('levelCycle', 0);
         game.setData('levelCycleCap', 3);
         game.setData('bonus', false);
-
-        // TODO only remains for use in LaserFire; all other pause-related functionality is possible without
-        //   to remove, require system retrieval from game
-        game.setData('paused', false);
     }
 });
 

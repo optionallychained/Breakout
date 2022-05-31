@@ -1,19 +1,19 @@
 import { Game, System, Transform, Vec2 } from 'aura-2d';
 import { Bullet } from '../entity/bullet.entity';
 
-// TODO last remaining usage of game paused bool would be resolved by enabling system retrieval from game; this also solves problems for
-//   PowerHandler
 export class LaserFire extends System {
 
     private time = 0;
     private interval = 200;
+
+    private paused = false;
 
     constructor() {
         super('LaserFire');
     }
 
     public tick(game: Game, frameDelta: number): void {
-        if (game.getData<boolean>('paused')) {
+        if (this.paused) {
             return;
         }
 
@@ -26,5 +26,9 @@ export class LaserFire extends System {
             game.world.addEntity(new Bullet(Vec2.add(transform.position, new Vec2(0, transform.scale.y / 2))));
             game.audio.play('shoot');
         }
+    }
+
+    public togglePaused(): void {
+        this.paused = !this.paused;
     }
 }

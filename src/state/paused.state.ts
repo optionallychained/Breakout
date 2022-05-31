@@ -1,5 +1,6 @@
 import { Color, State, Transform, Vec2 } from 'aura-2d';
 import { Frozen } from '../component/frozen.component';
+import { LaserFire } from '../system/laserFire.system';
 import { PowerHandler } from '../system/powerHandler.system';
 
 export const PAUSED_STATE = new State({
@@ -9,20 +10,17 @@ export const PAUSED_STATE = new State({
         game.getSystem<PowerHandler>('PowerHandler').togglePaused();
         game.world.filterEntitiesByTag('paddle')[0].addComponent(new Frozen());
 
-
-
-
-        // TODO only remains for use in LaserFire; all other pause-related functionality is possible without
-        //   to remove, require system retrieval from game
-        game.setData('paused', true);
+        if (game.hasSystem('LaserFire')) {
+            game.getSystem<LaserFire>('LaserFire').togglePaused();
+        }
     },
     end: (game) => {
         game.getSystem<PowerHandler>('PowerHandler').togglePaused();
         game.world.filterEntitiesByTag('paddle')[0].removeComponent('Frozen');
 
-
-
-        game.setData('paused', false);
+        if (game.hasSystem('LaserFire')) {
+            game.getSystem<LaserFire>('LaserFire').togglePaused();
+        }
     },
     tick: (game) => {
         game.text.clearEntities();
