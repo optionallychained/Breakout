@@ -16,22 +16,20 @@ export class Paddle extends Entity {
     }
 
     public tick(game: Game): void {
-        if (game.getData<boolean>('paused')) {
-            return;
+        if (!this.hasComponent('Frozen')) {
+            const transform = this.getComponent<Transform>('Transform');
+            const worldX = game.world.dimensions.x;
+            const mouseX = game.input.mousePos.x;
+            const dimX = transform.scale.x;
+            const wallSize = game.getData<number>('wallSize');
+
+            // reverse controls if appropriate
+            const position = this.hasComponent('Reverse') ? worldX / 2 - mouseX : mouseX - worldX / 2;
+
+            // move paddle with mouse, limit at screen edge
+            this.getComponent<Transform>('Transform').position.setX(
+                Math.min(Math.max((dimX - worldX) * 0.5 + wallSize, position), (worldX - dimX) * 0.5 - wallSize)
+            );
         }
-
-        const transform = this.getComponent<Transform>('Transform');
-        const worldX = game.world.dimensions.x;
-        const mouseX = game.input.mousePos.x;
-        const dimX = transform.scale.x;
-        const wallSize = game.getData<number>('wallSize');
-
-        // reverse controls if appropriate
-        const position = this.hasComponent('Reverse') ? worldX / 2 - mouseX : mouseX - worldX / 2;
-
-        // move paddle with mouse, limit at screen edge
-        this.getComponent<Transform>('Transform').position.setX(
-            Math.min(Math.max((dimX - worldX) * 0.5 + wallSize, position), (worldX - dimX) * 0.5 - wallSize)
-        );
     }
 }

@@ -8,6 +8,8 @@ const destroyTime = 750;
 export const GAME_OVER_STATE = new State({
     name: 'gameOver',
     init: (game) => {
+        game.removeSystems('Physics', 'Collision');
+
         game.setData('level', 1);
         game.setData('levelCycle', 0);
 

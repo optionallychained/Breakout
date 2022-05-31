@@ -11,6 +11,7 @@ import { Wall } from '../entity/wall.entity';
 import { BONUS_LEVELS } from '../levels/bonus';
 import { LEVEL_POOL } from '../levels/level';
 import { Sounds } from '../sounds';
+import { PowerHandler } from '../system/powerHandler.system';
 
 const bricks: Array<Brick> = [];
 const brickColors = [
@@ -32,6 +33,12 @@ const populateTime = 1500;
 export const GAME_SETUP_STATE = new State({
     name: 'gameSetup',
     init: (game) => {
+        game.world.removeEntities(
+            ...game.world.filterEntitiesByTags('ball', 'ball-multi', 'coin', 'power', 'explosion', 'bullet', 'invinciblebrick')
+        );
+
+        PowerHandler.deactivatePower(game);
+
         // choose a level
         let levelSet;
 

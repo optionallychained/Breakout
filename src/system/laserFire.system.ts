@@ -2,6 +2,8 @@ import { Game, System, Transform, Vec2 } from 'aura-2d';
 import { Bullet } from '../entity/bullet.entity';
 import { Sounds } from '../sounds';
 
+// TODO last remaining usage of game paused bool would be resolved by enabling system retrieval from game; this also solves problems for
+//   PowerHandler
 export class LaserFire extends System {
 
     private time = 0;
