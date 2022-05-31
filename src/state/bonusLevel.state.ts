@@ -50,7 +50,7 @@ export const BONUS_LEVEL_STATE = new State({
         time += frameDelta;
 
         // scale progress bar appropriately with time
-        const transform = game.world.filterEntitiesByTag('progressbar')[0]!.getComponent<Transform>('Transform');
+        const transform = game.world.filterEntitiesByTag('progressbar')[0].getComponent<Transform>('Transform');
         transform.scaleTo(new Vec2(
             (levelTime - time) / levelTime * transform.initialScale.x,
             transform.initialScale.y

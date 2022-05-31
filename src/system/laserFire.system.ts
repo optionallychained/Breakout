@@ -22,7 +22,7 @@ export class LaserFire extends System {
         if (this.time >= this.interval) {
             this.time -= this.interval;
 
-            const transform = game.world.filterEntitiesByTag('paddle')[0]!.getComponent<Transform>('Transform');
+            const transform = game.world.filterEntitiesByTag('paddle')[0].getComponent<Transform>('Transform');
             game.world.addEntity(new Bullet(Vec2.add(transform.position, new Vec2(0, transform.scale.y / 2))));
             game.audio.play('shoot');
         }

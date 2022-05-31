@@ -97,7 +97,7 @@ export abstract class Brick extends Entity {
         else if (
             Math.random() * 100 <= this.brickConfig.powerChance
             &&
-            !PowerHandler.isPowerActive()
+            !game.getSystem<PowerHandler>('PowerHandler').isPowerActive()
             &&
             !game.world.filterEntitiesByTag('power').length
         ) {

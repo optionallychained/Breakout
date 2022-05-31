@@ -31,7 +31,7 @@ export class Power extends Entity {
             game.world.removeEntity(this);
 
             const { isUp, power } = this.getComponent<Effect>('Effect');
-            PowerHandler.activatePower(power, game);
+            game.getSystem<PowerHandler>('PowerHandler').activatePower(power, game);
 
             if (isUp) {
                 game.audio.play('powerup');

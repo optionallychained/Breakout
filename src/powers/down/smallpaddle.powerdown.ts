@@ -10,7 +10,7 @@ export const SMALL_PADDLE: Power = {
         game.world.filterEntitiesByTag('paddle')[0]?.getComponent<Transform>('Transform').scaleBy(new Vec2(0.65, 1));
     },
     deactivate: (game) => {
-        const transform = game.world.filterEntitiesByTag('paddle')[0]!.getComponent<Transform>('Transform');
+        const transform = game.world.filterEntitiesByTag('paddle')[0].getComponent<Transform>('Transform');
         transform.scale.setX(transform.initialScale.x);
     }
 };

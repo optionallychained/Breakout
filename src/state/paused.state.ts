@@ -6,23 +6,29 @@ export const PAUSED_STATE = new State({
     name: 'paused',
     init: (game) => {
         game.removeSystems('Physics', 'Collision');
-        PowerHandler.togglePaused();
-        game.world.filterEntitiesByTag('paddle')[0]!.addComponent(new Frozen());
+        game.getSystem<PowerHandler>('PowerHandler').togglePaused();
+        game.world.filterEntitiesByTag('paddle')[0].addComponent(new Frozen());
+
+
+
 
         // TODO only remains for use in LaserFire; all other pause-related functionality is possible without
         //   to remove, require system retrieval from game
         game.setData('paused', true);
     },
     end: (game) => {
-        PowerHandler.togglePaused();
-        game.world.filterEntitiesByTag('paddle')[0]!.removeComponent('Frozen');
+        game.getSystem<PowerHandler>('PowerHandler').togglePaused();
+        game.world.filterEntitiesByTag('paddle')[0].removeComponent('Frozen');
+
+
+
         game.setData('paused', false);
     },
     tick: (game) => {
         game.text.clearEntities();
 
         if (game.input.isMouseDown()) {
-            const { position, scale } = game.world.filterEntitiesByTag('paddle')[0]!.getComponent<Transform>('Transform');
+            const { position, scale } = game.world.filterEntitiesByTag('paddle')[0].getComponent<Transform>('Transform');
 
             const { x: clickX, y: clickY } = Vec2.mult(
                 Vec2.sub(

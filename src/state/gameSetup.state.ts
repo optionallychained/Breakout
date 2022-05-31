@@ -36,7 +36,7 @@ export const GAME_SETUP_STATE = new State({
 
         (game.world.filterEntitiesByTag('ball')[0] as Ball)?.attach();
 
-        PowerHandler.deactivatePower(game);
+        game.getSystem<PowerHandler>('PowerHandler').deactivatePower(game);
 
         // choose a level
         let levelSet;

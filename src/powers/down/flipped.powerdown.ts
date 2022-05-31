@@ -2,7 +2,6 @@ import { Angle } from 'aura-2d';
 import { Reverse } from '../../component/reverse.component';
 import { Power } from '../power';
 
-// TODO might be nice to animate this?
 export const FLIPPED: Power = {
     name: 'Flipped!',
     timeout: 5000,

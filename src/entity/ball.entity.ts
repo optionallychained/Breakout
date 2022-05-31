@@ -67,7 +67,7 @@ export class Ball extends Entity {
                     game.world.removeEntities(...game.world.filterEntitiesByTags('power', 'coin', 'bullet', 'ball-multi'));
 
                     // deactivate any active powers
-                    PowerHandler.deactivatePower(game);
+                    game.getSystem<PowerHandler>('PowerHandler').deactivatePower(game);
 
                     game.audio.play('death');
                 }
