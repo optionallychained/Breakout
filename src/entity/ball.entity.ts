@@ -1,5 +1,4 @@
 import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
-import { Sounds } from '../sounds';
 import { PowerHandler } from '../system/powerHandler.system';
 import { BRICK_TAGS } from './bricks/brickInfo';
 import { Explosion } from './explosion.entity';
@@ -70,7 +69,7 @@ export class Ball extends Entity {
                     // deactivate any active powers
                     PowerHandler.deactivatePower(game);
 
-                    Sounds.play('death');
+                    game.audio.play('death');
                 }
             }
         }
@@ -87,17 +86,17 @@ export class Ball extends Entity {
         let velMultX = 1, velMultY = 1, velChange = 0;
 
         if (other.tag === 'wall-vert') {
-            Sounds.play('paddlewall');
+            game.audio.play('paddlewall');
 
             velMultX = -1;
         }
         else if (other.tag === 'wall-hor' || other.tag === 'wall-temp') {
-            Sounds.play('paddlewall');
+            game.audio.play('paddlewall');
 
             velMultY = -1;
         }
         else if (other.tag === 'paddle') {
-            Sounds.play('paddlewall');
+            game.audio.play('paddlewall');
 
             if (!this.multi) {
                 // reset points multiplier

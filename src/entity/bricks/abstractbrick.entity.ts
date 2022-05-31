@@ -1,7 +1,6 @@
 import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Geometry, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
 import { Health } from '../../component/health.component';
 import { Points } from '../../component/points.component';
-import { Sounds } from '../../sounds';
 import { PowerHandler } from '../../system/powerHandler.system';
 import { Coin } from '../coin.entity';
 import { Power } from '../power.entity';
@@ -83,7 +82,7 @@ export abstract class Brick extends Entity {
             sound = 'paddlewall';
         }
 
-        Sounds.play(sound);
+        game.audio.play(sound);
     }
 
     protected spawnContents(game: Game): void {
@@ -93,7 +92,7 @@ export abstract class Brick extends Entity {
         const coin = Math.random() * 100 <= this.brickConfig.coinChance;
         if (coin) {
             game.world.addEntity(new Coin(position, this.getComponent<Points>('Points').value * 10 * game.getData<number>('level')));
-            Sounds.play('coinpowerspawn');
+            game.audio.play('coinpowerspawn');
         }
         else if (
             Math.random() * 100 <= this.brickConfig.powerChance
@@ -104,7 +103,7 @@ export abstract class Brick extends Entity {
         ) {
 
             game.world.addEntity(new Power(position));
-            Sounds.play('coinpowerspawn');
+            game.audio.play('coinpowerspawn');
         }
     }
 }

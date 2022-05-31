@@ -8,7 +8,6 @@ import { InvincibleBrick } from '../entity/bricks/invinciblebrick.entity';
 import { SimpleBrick } from '../entity/bricks/simplebrick.entity';
 import { BONUS_LEVELS } from '../levels/bonus';
 import { LEVEL_POOL } from '../levels/level';
-import { Sounds } from '../sounds';
 import { PowerHandler } from '../system/powerHandler.system';
 
 const bricks: Array<Brick> = [];
@@ -119,7 +118,7 @@ export const GAME_SETUP_STATE = new State({
 
         game.setData('multiplier', game.getData<number>('levelCycle') + 1);
 
-        Sounds.play('levelsetup');
+        game.audio.play('levelsetup');
     },
     end: (game) => {
         game.text.clearEntities();

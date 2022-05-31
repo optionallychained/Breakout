@@ -1,6 +1,5 @@
 import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
 import { Points } from '../component/points.component';
-import { Sounds } from '../sounds';
 
 export class Coin extends Entity {
 
@@ -30,7 +29,7 @@ export class Coin extends Entity {
         if (other.tag === 'paddle') {
             game.world.removeEntity(this);
             game.setData('points', game.getData<number>('points') + this.getComponent<Points>('Points').value);
-            Sounds.play('coincollect');
+            game.audio.play('coincollect');
         }
     }
 }

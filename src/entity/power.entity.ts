@@ -1,6 +1,5 @@
 import { BoxCollider, Color, Entity, FlatColor, Game, Geometries, Model, Shader, ShaderPrograms, Transform, Vec2 } from 'aura-2d';
 import { Effect } from '../component/effect.component';
-import { Sounds } from '../sounds';
 import { PowerHandler } from '../system/powerHandler.system';
 
 export class Power extends Entity {
@@ -35,10 +34,10 @@ export class Power extends Entity {
             PowerHandler.activatePower(power, game);
 
             if (isUp) {
-                Sounds.play('powerup');
+                game.audio.play('powerup');
             }
             else {
-                Sounds.play('powerdown');
+                game.audio.play('powerdown');
             }
         }
     }
